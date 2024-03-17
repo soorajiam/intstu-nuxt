@@ -1,0 +1,23 @@
+{
+    "company_name": "Intstu",
+    "home":{
+        "title": "Intstu",
+        "description": "Intstu is a company that provides a platform for",
+        "blog": "Blog",
+        "contact": "Contact",
+        "institutes": "Institutes",
+        "log_in": "Log in",
+        "sign_up": "Sign up"
+    },
+    "institute_list":{
+        "title": "Explore Institutes",
+        "description": "Find the best institutes for your needs",
+        "search": "Search Institutes by name",
+        "description": "Find the best institutes for your needs"
+    },
+    "blog_list": {
+        "title": "Blog",
+        "description": "Read the latest articles",
+        "search": "Search Blog by title"
+    }
+}
