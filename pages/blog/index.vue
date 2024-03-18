@@ -16,6 +16,7 @@ var previous = ref("");
 let offset = ref(0);
 let paginationLength = ref(1);
 let page = ref(1);
+let resultCount = ref(0);
 
 
 const countries_response = useCustomFetch('country/dropdown/', {
@@ -31,41 +32,60 @@ const countries_response = useCustomFetch('country/dropdown/', {
       console.log("Error");
     });
 
+const ListPosts = () => {
+  const { data, pending, error } =  useAPIFetch('blogs/blog/', {
+    query: {
+      limit: '12',
+      offset: offset.value,
+      search: search.value,
+      country: selectedCountry.value,
+    },
+  })
+
+// To process the data after it's fetched
+if (!pending.value && !error.value) {
+  items.value = data.value.data.results;
+  console.log("---DATA---")
+  console.log(data);
+  // Uncomment and adapt if needed
+  // items.value.forEach(item => {
+  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
+  // });
+  next.value = data.value.next;
+  previous.value = data.value.previous;
+  resultCount.value = data.value.count;
+  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+}
+
+}
+
 const getBlogPosts = () => {
-  const response = useCustomFetch("blogs/blog/?limit=12&" +
-      "&offset=" +
-      offset.value +
-      "&search=" +
-      search.value +
-      "&country=" +
-      selectedCountry.value
-      , {
+  const response = useCustomFetch('blogs/blog/', {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
+    query: {
+      limit: '12',
+      offset: offset.value,
+      search: search.value,
+      country: selectedCountry.value,
+    },
   })
     .then((response) => {
       items.value = response.data.results;
-      console.log(items.value);
-    //   for (let i = 0; i < items.value.length; i++) {
-    //     items.value[i].published_on = dayjs.unix(items.value[i].published_on).format(
-    //       "MMMM DD, YYYY"
-    //     );
-    //   }
-      next.value = response.data.next;
-      previous.value = response.data.previous;
-      resultCount.value = response.data.count;
+      next.value = response.next;
+      previous.value = response.previous;
+      resultCount.value = response.count;
       paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
     })
     .catch((error) => {
-      console.log(error.response);
+      console.log("Error");
     });
+};
 
-}
 
-
-getBlogPosts()
+ListPosts()
 
 const nextPage = () => {
   if (next.value) {

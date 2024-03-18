@@ -2,12 +2,12 @@
 <header>
   <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
       <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <NuxtLink :to="localePath('/')" class="flex items-center">
-              <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
+          <a :href="localePath('/')" class="flex items-center">
+              <img src="/images/logo/intstu_logo.png" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
               <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">{{ $t('company_name') }}</span>
              
 
-          </NuxtLink>
+          </a>
           <select
           v-model="current_language"
           class="ml-1 py-1 px-1 text-sm font-medium text-gray-700 dark:text-gray-400 focus:ring-4 focus:ring-primary-300 rounded-lg dark:focus:ring-primary-800 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-primary-500 dark:border-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -54,10 +54,10 @@
               <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
             
               <li>
-                  <NuxtLink :to="localePath('/blog')" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{$t('home.blog')}}</NuxtLink>
+                  <a :href="localePath('/blog/')" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{$t('home.blog')}}</a>
               </li>
               <li>
-                  <NuxtLink :to="localePath('/institutes')" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{$t('home.institutes')}}</NuxtLink>
+                  <a :href="localePath('/institutes/')" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{$t('home.institutes')}}</a>
               </li>
             
             

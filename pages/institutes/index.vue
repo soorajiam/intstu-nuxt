@@ -65,7 +65,34 @@ const getInstituteList = () => {
 };
 
 
-getInstituteList();
+const ListInstitutes = async () => {
+  const { data, pending, error } = await  useAPIFetch('institutes/institutions/', {
+    query: {
+      limit: '12',
+      offset: offset.value,
+      search: search.value,
+      country: selectedCountry.value,
+    },
+  })
+
+// To process the data after it's fetched
+if (!pending.value && !error.value) {
+  items.value = data.value.data.results;
+  console.log("---DATA---")
+  console.log(data);
+  // Uncomment and adapt if needed
+  // items.value.forEach(item => {
+  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
+  // });
+  next.value = data.value.next;
+  previous.value = data.value.previous;
+  resultCount.value = data.value.count;
+  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+}
+
+}
+
+ListInstitutes();
 
 const nextPage = () => {
   if (next.value) {

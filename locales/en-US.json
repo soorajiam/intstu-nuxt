@@ -7,7 +7,18 @@
         "contact": "Contact",
         "institutes": "Institutes",
         "log_in": "Log in",
-        "sign_up": "Sign up"
+        "sign_up": "Sign up",
+        "hero": {
+            "heading": "Find the best institutes for your needs",
+            "description": "Intstu is a community that aims to make the process of finding the best institutes for your needs easier.",
+            "institution_count": "10K",
+            "institution_count_description": "Institutes",
+            "student_count": "1K",
+            "student_count_description": "Students",
+            "courses_count": "20K",
+            "courses_count_description": "Courses",
+            "cta_hook": "Join over 1000 students worldwide"
+        }
     },
     "institute_list":{
         "title": "Explore Institutes",
