@@ -5,7 +5,8 @@ export const useAPIFetch = (url, options = {}) => {
   const config = useRuntimeConfig()
 
   // Optionally, retrieve a baseURL from runtime config if it's defined there
-  const baseURL = 'http://127.0.0.1:8001/'
+  // const baseURL = 'http://127.0.0.1:8001/'
+  const baseURL = "https://api.intstu.org/"
 
   // Use Nuxt 3's useFetch with the provided URL, options, and the baseURL
   const { data, error, pending, refresh } = useFetch(baseURL + url, {
