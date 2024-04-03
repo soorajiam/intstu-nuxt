@@ -9,7 +9,7 @@
         
         <homeBlogList />
 
-        <homeNewsletter />
+
         
     </div>
 </template>

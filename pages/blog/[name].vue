@@ -1,4 +1,6 @@
 <script setup>
+
+const localePath = useLocalePath();
 const route = useRoute()
 const name = ref(route.params.name)
 const blog = ref("");
@@ -9,18 +11,18 @@ blog.value = `# h1 Heading`;
 import { marked } from 'marked';
 
 const response = useCustomFetch("blogs/blog/" + name.value + "/", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
   .then((response) => {
     // console.log(response);
     blog.value = response.data;
     markdownToHtml.value = marked.parse(blog.value.content);
     blog.value.published_on = dayjs.unix(blog.value.published_on).format(
-          "MMMM DD, YYYY"
-        );
+      "MMMM DD, YYYY"
+    );
     // console.log(blog.value);
 
   })
@@ -28,23 +30,23 @@ const response = useCustomFetch("blogs/blog/" + name.value + "/", {
     console.log(error.response);
   });
 
-  const backgroundStyle = computed(() => ({
+const backgroundStyle = computed(() => ({
   backgroundImage: `url('${blog.value.featured_image}')`
 }));
 
 const response_list = useCustomFetch("blogs/blog/?limit=3", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
   .then((response_list) => {
-      items.value = response_list.data.results;
-      
-    })
-    .catch((error) => {
-      console.log(error.response);
-    });
+    items.value = response_list.data.results;
+
+  })
+  .catch((error) => {
+    console.log(error.response);
+  });
 
 
 // const markdownToHtml = computed(() => {
@@ -59,15 +61,12 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
 
 <template>
 
-<main class="pb-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased mb-12">
-    <header
-      class="w-full h-[460px] xl:h-[537px] bg-no-repeat bg-cover bg-center bg-blend-darken bg-gray-500  relative "
+  <main class="pb-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased mb-12">
+    <header class="w-full h-[460px] xl:h-[537px] bg-no-repeat bg-cover bg-center bg-blend-darken bg-gray-500  relative "
       :style="backgroundStyle">
-      <div class="absolute top-0 left-0  h-full  bg-no-repeat"
-      :style="backgroundStyle"></div>
+      <div class="absolute top-0 left-0  h-full  bg-no-repeat" :style="backgroundStyle"></div>
       <div
-        class="absolute top-20 left-1/2 px-4 mx-auto w-full max-w-screen-xl -translate-x-1/2 xl:top-1/2 xl:-translate-y-1/2 xl:px-0"
-        >
+        class="absolute top-20 left-1/2 px-4 mx-auto w-full max-w-screen-xl -translate-x-1/2 xl:top-1/2 xl:-translate-y-1/2 xl:px-0">
         <span class="block mb-4 text-gray-300">Published in <span href="#"
             class="font-semibold text-white hover:underline flex gap-2 flex-wrap">
             <span v-for="country in blog.countries" :key="country.id">
@@ -75,7 +74,7 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
             </span>
           </span></span>
         <h1 class="mb-4 max-w-4xl text-2xl font-extrabold leading-none text-white sm:text-3xl lg:text-4xl">
-          {{blog.title}}</h1>
+          {{ blog.title }}</h1>
         <p class="text-lg font-normal text-gray-100">{{ blog.description }}</p>
       </div>
     </header>
@@ -85,12 +84,12 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
         class="xl:w-[828px] w-full max-w-none format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
         <div class="flex flex-col lg:flex-row justify-between lg:items-center">
           <div class="flex items-center space-x-3 text-gray-500 dark:text-gray-400 text-base mb-2 lg:mb-0">
-            <span>By <a href="#" class="text-gray-900 dark:text-white hover:underline no-underline font-semibold">IntStu</a></span>
+            <span>By <a href="#"
+                class="text-gray-900 dark:text-white hover:underline no-underline font-semibold">IntStu</a></span>
             <span class="bg-gray-300 dark:bg-gray-400 w-2 h-2 rounded-full"></span>
-            <span><time class="font-normal text-gray-400 dark:text-gray-500"  :datetime="blog.published_on"
-                >{{
-                    blog.published_on
-                  }}</time></span>
+            <span><time class="font-normal text-gray-400 dark:text-gray-500" :datetime="blog.published_on">{{
+        blog.published_on
+      }}</time></span>
           </div>
           <aside aria-label="Share social media">
             <div class="not-format">
@@ -194,7 +193,8 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
                 <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownMenuIconHorizontalButton">
                   <li>
-                    <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
+                    <a href="#"
+                      class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
                       to collection</a>
                   </li>
                   <li>
@@ -518,38 +518,41 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
       <aside class="hidden xl:block" aria-labelledby="sidebar-label">
         <div class="xl:w-[336px] sticky top-6">
           <h3 id="sidebar-label" class="sr-only">Sidebar</h3>
-          <div class="mb-8">
-            <h4 class="mb-2 text-sm font-bold text-gray-900 dark:text-white uppercase">{{$t('blog_detail.newsletter_banner.title')}}
+          <!-- <div class="mb-8">
+            <h4 class="mb-2 text-sm font-bold text-gray-900 dark:text-white uppercase">
+              {{ $t('blog_detail.newsletter_banner.title') }}
             </h4>
             <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-              {{$t('blog_detail.newsletter_banner.content')}}
+              {{ $t('blog_detail.newsletter_banner.content') }}
             </p>
             <a type="button" data-modal-toggle="newsletter-modal" href="#subsciberSegment"
               class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 text-center w-full">
-              {{$t('blog_detail.newsletter_banner.subscribe_button_text')}}
+              {{ $t('blog_detail.newsletter_banner.subscribe_button_text') }}
             </a>
-          </div>
+          </div> -->
           <div class="mb-12">
             <h4 class="mb-4 text-sm font-bold text-gray-900 dark:text-white uppercase">Latest news</h4>
-            <div  class="mb-6 flex items-center"
-            v-for="post in  items " :key="post.id">
-              <a href="#" class="shrink-0">
-                <img :src="post.featured_image"
-                  class="mr-4 max-w-full w-24 h-24 rounded-lg" alt="Image 1">
-              </a>
+            <div class="mb-6 flex items-center" v-for="post in  items " :key="post.id">
+              <!-- <a href="#" class="shrink-0"> -->
+                <!-- <img :src="post.featured_image" class="mr-4 max-w-full  h-24 rounded-lg" alt="Image 1">
+              </a> -->
               <div>
-                <h5 class="mb-2 text-lg font-bold leading-tight dark:text-white text-gray-900">{{post.title}}</h5>
-                <p class="mb-2 text-gray-500 dark:text-gray-400">{{post.description}}</p>
-                <a
-                  class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
+                <NuxtLink :to="localePath('/blog/'+post.slug)" class="shrink-0">
+                <img :src="post.featured_image" class="mr-4 w-64 h-max-32 rounded-lg" alt="Image 1">
+                </NuxtLink>
+                <h5 class="mb-2 text-lg font-bold leading-tight dark:text-white text-gray-900">{{ post.title }}</h5>
+                <p class="mb-2 text-gray-500 dark:text-gray-400">{{ post.description }}</p>
+                <NuxtLink :to="localePath('/blog/'+post.slug)"
+                  class=" cursor-pointer inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
                   Read
-                </a>
+                </NuxtLink>
               </div>
             </div>
-           
+
           </div>
-          <div>
-            <a href="#" class="flex justify-center items-center mb-3 w-full h-48 bg-gray-100 rounded-lg dark:bg-gray-700">
+          <!-- <div>
+            <a href="#"
+              class="flex justify-center items-center mb-3 w-full h-48 bg-gray-100 rounded-lg dark:bg-gray-700">
               <svg aria-hidden="true" class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -560,7 +563,7 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">Students and Teachers, save up to 60% on Flowbite
               Creative Cloud.</p>
             <p class="text-xs text-gray-400 uppercase dark:text-gray-500">Ads placeholder</p>
-          </div>
+          </div> -->
         </div>
       </aside>
     </div>

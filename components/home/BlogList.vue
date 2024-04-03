@@ -3,71 +3,17 @@
     <div class="px-4 mx-auto max-w-screen-xl">
         <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Read Next</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-1.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 1">
-                </a>
+            
+            <article v-for="blog in items" :key="blog.id">
+                <NuxtLink :to="localePath('/blog/'+blog.slug)">
+                    <img :src="blog.featured_image" class="mb-5 w-full max-w-full rounded-lg h-64" alt="Image 6">
+                </NuxtLink>
                 <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Flowbite enables IT to automate Apple device configuration</a>
+                    <NuxtLink :to="localePath('/blog/'+blog.slug)">{{blog.title}}</NuxtLink>
                 </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
+                <NuxtLink :to="localePath('/blog/'+blog.slug)" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
                     Read more
-                </a>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-2.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 2">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">How AI is transforming your smartphone</a>
-                </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
-                </a>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-3.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 3">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Android, ChromeOS, and the future of app discovery</a>
-                </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
-                </a>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-4.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 4">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">What Google collaboration app offers remote teams</a>
-                </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
-                </a>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-5.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 5">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Collaboration app spending grows in the face of crisis</a>
-                </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
-                </a>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-6.jpg" class="mb-5 w-full max-w-full rounded-lg" alt="Image 6">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">For developers, too many meetings, too little 'focus' time</a>
-                </h2>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
-                </a>
+                </NuxtLink>
             </article>
         </div>
     </div>
@@ -76,5 +22,28 @@
 </template>
 
 <script setup>
+
+import { ref } from 'vue';
+
+const items = ref([]);
+
+const getBlogPosts = () => {
+  const response = useCustomFetch('blogs/blog/', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    query: {
+      limit: '6',
+    },
+  })
+    .then((response) => {
+      items.value = response.data.results;
+    })
+    .catch((error) => {
+      console.log("Error");
+    });
+};
+getBlogPosts();
 
 </script>

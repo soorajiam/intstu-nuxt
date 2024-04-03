@@ -8,7 +8,27 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
+    '@unlok-co/nuxt-stripe',
   ],
+
+  stripe: {
+    // Server
+    server: {
+      key: import.meta.env.VITE_STRIPE_PUBLIC_KEY,
+      options: {
+        // your api options override for stripe server side
+        apiVersion: '2022-11-15', // optional, default is '2022-11-15'
+      }
+    // CLIENT
+    },
+    client: {
+      key: import.meta.env.VITE_STRIPE_PUBLIC_KEY,
+      // your api options override for stripe client side
+      options: {
+
+      }
+    }
+  },
   
   postcss: {
     plugins: {
