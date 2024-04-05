@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
     '@unlok-co/nuxt-stripe',
+    '@pinia/nuxt',
   ],
 
   stripe: {

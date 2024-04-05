@@ -2,7 +2,7 @@
 import { useRuntimeConfig } from '#app'
 
 export const useAPIFetch = (url, options = {}) => {
-  const config = useRuntimeConfig()
+
 
   // Optionally, retrieve a baseURL from runtime config if it's defined there
   const baseURL = 'http://127.0.0.1:8001/'

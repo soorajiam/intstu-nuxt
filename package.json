@@ -12,10 +12,12 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.19",
     "@heroicons/vue": "^2.1.1",
+    "@pinia/nuxt": "^0.5.1",
     "flowbite": "^2.3.0",
     "lodash.debounce": "^4.0.8",
     "marked": "^12.0.1",
     "nuxt": "^3.10.3",
+    "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-country-flag-next": "^2.3.2",
     "vue-router": "^4.3.0"
