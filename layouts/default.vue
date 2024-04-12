@@ -3,5 +3,7 @@
   <div>
   <NavbarPublic />
     <slot />
+    <HomeNewsletter />
+    <HomeFooter />
   </div>
 </template>

@@ -1,7 +1,9 @@
 <script setup>
 import debounce from 'lodash.debounce'
 
-const items = ref([]);
+const items = ref([
+  'load data'
+]);
 
 let countries = ref("");
 let selectedCountry = ref("");
@@ -83,6 +85,10 @@ const getBlogPosts = () => {
       console.log("Error");
     });
 };
+
+if( items.value.length == 1 && items.value[0] == 'load data' ){
+  getBlogPosts();
+}
 
 
 ListPosts()

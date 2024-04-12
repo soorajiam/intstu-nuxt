@@ -3,9 +3,18 @@
     <div class="px-4 mx-auto max-w-screen-xl">
         <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Read Next</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <BlogList
-                v-for="(item, index) in items" :key="index" :item="item"
-            />
+            
+            <article v-for="blog in items" :key="blog.id">
+                <NuxtLink :to="localePath('/blog/'+blog.slug)">
+                    <img :src="blog.featured_image" class="mb-5 w-full max-w-full rounded-lg h-64" alt="Image 6">
+                </NuxtLink>
+                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                    <NuxtLink :to="localePath('/blog/'+blog.slug)">{{blog.title}}</NuxtLink>
+                </h2>
+                <NuxtLink :to="localePath('/blog/'+blog.slug)" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
+                    Read more
+                </NuxtLink>
+            </article>
         </div>
     </div>
 </aside>
@@ -14,23 +23,27 @@
 
 <script setup>
 
-const items = ref([])
+import { ref } from 'vue';
 
-const ListPosts = () => {
-  const { data, pending, error } =  useAPIFetch('blogs/blog/', {
+const items = ref([]);
+
+const getBlogPosts = () => {
+  const response = useCustomFetch('blogs/blog/', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
     query: {
       limit: '6',
-     
     },
   })
-
-  // To process the data after it's fetched
-if (!pending.value && !error.value) {
-  items.value = data.value.data.results;
-
-}
-
-}
-ListPosts()
+    .then((response) => {
+      items.value = response.data.results;
+    })
+    .catch((error) => {
+      console.log("Error");
+    });
+};
+getBlogPosts();
 
 </script>
