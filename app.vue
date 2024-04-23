@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Meta name="google-adsense-account" content="ca-pub-9324362451727622" />
+  </Head>
   <div class="bg-white dark:bg-gray-800">
     <NuxtLayout>
     <NuxtPage />
