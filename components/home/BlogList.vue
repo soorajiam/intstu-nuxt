@@ -5,15 +5,15 @@
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             
             <article v-for="blog in items" :key="blog.id">
-                <NuxtLink :to="localePath('/blog/'+blog.slug)">
+                <a :href="localePath('/blog/'+blog.slug)">
                     <img :src="blog.featured_image" class="mb-5 w-full max-w-full rounded-lg h-64" alt="Image 6">
-                </NuxtLink>
+                </a>
                 <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <NuxtLink :to="localePath('/blog/'+blog.slug)">{{blog.title}}</NuxtLink>
+                    <a :href="localePath('/blog/'+blog.slug)">{{blog.title}}</a>
                 </h2>
-                <NuxtLink :to="localePath('/blog/'+blog.slug)" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
+                <a :href="localePath('/blog/'+blog.slug)" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
                     Read more
-                </NuxtLink>
+                </a>
             </article>
         </div>
     </div>
@@ -41,7 +41,7 @@ const getBlogPosts = () => {
       items.value = response.data.results;
     })
     .catch((error) => {
-      console.log("Error");
+      //console.log("Error");
     });
 };
 getBlogPosts();

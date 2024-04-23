@@ -6,7 +6,7 @@ var search = ref("");
 var items = ref("");
 var next = ref("");
 var previous = ref("");
-let offset = ref(0);
+const offset = computed(() => page.value * 10);
 let paginationLength = ref(1);
 let page = ref(1);
 
@@ -14,6 +14,11 @@ let countries = ref("");
 let selectedCountry = ref("");
 selectedCountry.value = "all";
 
+const route = useRoute();
+if (route.query.page) {
+  page.value = parseInt(route.query.page);
+
+}
 
   const response = useCustomFetch('country/dropdown/', {
     method: "GET",
@@ -25,7 +30,7 @@ selectedCountry.value = "all";
         countries.value = response.data.countries;
     })
     .catch((error) => {
-      console.log("Error");
+      //console.log("Error");
     });
 
 var resultCount = ref(0);
@@ -51,15 +56,15 @@ const getInstituteList = () => {
   })
     .then((response) => {
       items.value = response.data.results;
-      console.log(response);
-      console.log(items);
+      //console.log(response);
+      //console.log(items);
       next.value = response.data.next;
       previous.value = response.data.previous;
       resultCount.value = response.data.count;
       paginationLength.value = Math.ceil(resultCount.value / 10) - 1;
     })
     .catch((error) => {
-      console.log("Error");
+      //console.log("Error");
     });
 
 };
@@ -78,15 +83,15 @@ const ListInstitutes = async () => {
 // To process the data after it's fetched
 if (!pending.value && !error.value) {
   items.value = data.value.data.results;
-  console.log("---DATA---")
-  console.log(data);
+  //console.log("---DATA---")
+  //console.log(data);
   // Uncomment and adapt if needed
   // items.value.forEach(item => {
   //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
   // });
   next.value = data.value.next;
   previous.value = data.value.previous;
-  resultCount.value = data.value.count;
+  resultCount.value = data.value.data.count;
   paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
 }
 
@@ -216,14 +221,14 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
       </span>
       <!-- Buttons -->
       <div class="inline-flex mt-2 xs:mt-0">
-        <button @click="previousPage"
+        <a :href="page > 1 ? localePath({ query: { page: page - 1 } }) : ''"
           class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 rounded-l hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           Prev
-        </button>
-        <button @click="nextPage"
+        </a>
+        <a :href="page <= (resultCount/10) ? localePath({ query: { page: page + 1 } }) : ''"
           class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 border-0 border-l border-gray-700 rounded-r hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           Next
-        </button>
+        </a>
       </div>
 
       

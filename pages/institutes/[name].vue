@@ -16,11 +16,11 @@ const response = useCustomFetch("institutes/institutions/public/" + name.value +
     data.value = response.data;
     paragraphs.value = data.value.description.split("\n\n");
    
-    console.log(data.value);
+    //console.log(data.value);
 
   })
   .catch((error) => {
-    console.log(error.response);
+    //console.log(error.response);
   });
 
 </script>

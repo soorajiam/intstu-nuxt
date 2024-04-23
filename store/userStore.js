@@ -28,7 +28,7 @@ export const useUserStore = defineStore({
             this.user_id = user_id
             this.token = token
 
-            console.log('user_id', user_id)
+            //console.log('user_id', user_id)
 
             localStorage.setItem('user_id', user_id)
             localStorage.setItem('token', token)

@@ -64,9 +64,11 @@ const subscribe = async () => {
                 email: email.value,
             }),
         });
-        console.log(response);
-    } catch (error) {
-        console.log("Error");
+        //console.log(response);
+        error.value = '';
+    } catch (error_message) {
+        //console.log("Error");
+        error.value = 'Invalid email or already subscribed';
     }
 };
 

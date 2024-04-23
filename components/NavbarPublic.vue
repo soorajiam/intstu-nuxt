@@ -9,12 +9,12 @@
 
 
         </a>
-        <select v-model="current_language"
+        <!-- <select v-model="current_language"
           class="ml-1 py-1 px-1 text-sm font-medium text-gray-700 dark:text-gray-400 focus:ring-4 focus:ring-primary-300 rounded-lg dark:focus:ring-primary-800 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-primary-500 dark:border-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
           <option v-for="item in locales" :key="item.code" :value="item.code" class="hover:text-sky-600">
             {{ item.name }}
           </option>
-        </select>
+        </select> -->
         <div class="flex items-center lg:order-2">
           <NuxtLink :to="localePath('/auth/login/')"
             class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{{ $t('home.log_in') }}</NuxtLink>
@@ -85,7 +85,7 @@
           $t('home.contact') }}</a>
             </li>
             <button @click="changeTheme()" data-tooltip-target="tooltip-dark" type="button"
-              class="inline-flex items-center p-2 mr-1 text-sm font-medium text-gray-500 rounded-lg dark:text-gray-400 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+              class=" inline-flex items-center  mr-1 text-sm font-medium text-gray-500 rounded-lg dark:text-gray-400 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
               </svg>
@@ -113,7 +113,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const { locales, locale, setLocale } = useI18n();
 
-console.log("locales: ", locale.value);
+//console.log("locales: ", locale.value);
 
 const current_language = computed({
   get: () => locale.value,
@@ -137,7 +137,7 @@ const changeTheme = () => {
 };
 
 
-console.log(current_language)
+//console.log(current_language)
 
 const localePath = useLocalePath();
 let theme = ref("light");

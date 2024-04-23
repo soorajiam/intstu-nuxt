@@ -17,17 +17,17 @@ const response = useCustomFetch("blogs/blog/" + name.value + "/", {
   },
 })
   .then((response) => {
-    // console.log(response);
+    // //console.log(response);
     blog.value = response.data;
     markdownToHtml.value = marked.parse(blog.value.content);
     blog.value.published_on = dayjs.unix(blog.value.published_on).format(
       "MMMM DD, YYYY"
     );
-    // console.log(blog.value);
+    // //console.log(blog.value);
 
   })
   .catch((error) => {
-    console.log(error.response);
+    //console.log(error.response);
   });
 
 const backgroundStyle = computed(() => ({
@@ -45,12 +45,12 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
 
   })
   .catch((error) => {
-    console.log(error.response);
+    //console.log(error.response);
   });
 
 
 // const markdownToHtml = computed(() => {
-//     console.log(blog.value)
+//     //console.log(blog.value)
 //   return marked.parse(blog.value.content)
 
 // // return marked.parse(`# h1 Heading`)

@@ -6,9 +6,9 @@
         class="w-full h-48 object-cover rounded-t-md"
       /> -->
       <div class="p-4">
-        <NuxtLink class="font-bold text-xl mb-2 text-blue-600 dark:text-blue-300"
-          :to="localePath('/institutes/'+item.slug)"
-        >{{ item.name }}</NuxtLink>
+        <a class="font-bold text-xl mb-2 text-blue-600 dark:text-blue-300"
+          :href="localePath('/institutes/'+item.slug)"
+        >{{ item.name }}</a>
   
         <p class="text-sm dark:text-gray-100">{{ item.short_description }}...</p>
       </div>

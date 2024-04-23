@@ -16,7 +16,7 @@ const userStore = useUserStore();
 
 if (process.client) {
   if (localStorage.getItem('token')) {
-  console.log('token found');
+  //console.log('token found');
   userStore.login(
     localStorage.getItem('user_id'),
     localStorage.getItem('token'),
