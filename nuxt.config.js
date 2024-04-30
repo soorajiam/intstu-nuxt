@@ -2,6 +2,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  head: {
+    meta: [
+      { hid: 'google-adsense-account', name: 'google-adsense-account', content: 'ca-pub-9324362451727622' }
+    ]
+    // other head elements
+  },
+
   css: ['~/assets/css/main.css'],
 
   
@@ -33,7 +40,7 @@ export default defineNuxtConfig({
   },
 
   gtag: {
-    id: 'GTM-NT3J2ZB3'
+    id: import.meta.env.VITE_GA_ID,
   },
   
   postcss: {

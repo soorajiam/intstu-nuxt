@@ -1,24 +1,22 @@
 <script setup>
 import debounce from 'lodash.debounce'
 
-const items = ref([
-  'load data'
-]);
+const items = ref([]);
 
-let countries = ref("");
-let selectedCountry = ref("");
+const countries = ref("");
+const selectedCountry = ref("");
 selectedCountry.value = "all";
 
 const { locale, t } = useI18n();
 
-var search = ref("");
+const search = ref("");
 
-var next = ref("");
-var previous = ref("");
-let offset = ref(0);
-let paginationLength = ref(1);
-let page = ref(1);
-let resultCount = ref(0);
+const next = ref("");
+const previous = ref("");
+const offset = ref(0);
+const paginationLength = ref(1);
+const page = ref(1);
+const resultCount = ref(0);
 
 
 const countries_response = useCustomFetch('country/dropdown/', {
@@ -86,7 +84,7 @@ const getBlogPosts = () => {
     });
 };
 
-if( items.value.length == 1 && items.value[0] == 'load data' ){
+if( items.value.length == 0){
   getBlogPosts();
 }
 
@@ -159,15 +157,15 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
 
 <template>
 
-<section class="bg-white dark:bg-gray-800">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+<section class="bg-white dark:bg-gray-900">
+    <div class="pt-8 px-4 mx-auto max-w-screen-xl lg:pt-16 lg:px-6">
       <div class="relative w-full  h-64">
         <h1 class=" pt-12 text-center text-black dark:text-white text-3xl">
           {{ $t('blog_list.title') }}
         </h1>
 
-        <div class="absolute inset-x-0 bottom-0 h-32  p-4 md:w-2/3 md:mx-auto">
-          <form>
+        <!-- <div class="absolute inset-x-0 bottom-0 h-32  p-4 md:w-2/3 md:mx-auto"> -->
+          <!-- <form>
             <div class="flex mx-auto md:w-2/3 md:mx-auto">
               <div class="  w-64 relative inline-flex text-left">
                 <select id="dropdown-search-city" v-model="selectedCountry"
@@ -177,7 +175,7 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
                     {{ country[1] }}
                   </option>
 
-                  <!-- Add more options with icons here -->
+                  
                 </select>
 
               </div>
@@ -197,13 +195,18 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
                 </button>
               </div>
             </div>
-          </form>
+          </form> -->
          
-        </div>
+        <!-- </div> -->
       </div>
       <p class="p-2">{{$t("blog_list.description")}}</p>
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <BlogList v-for="post in  items " :key="post.id" :item="post"/>
+        <div v-for="post in  items " :key="post.id">
+          <BlogList  :item="post"/>
+        </div>
+       
+
+
           
 
 

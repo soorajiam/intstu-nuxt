@@ -6,7 +6,7 @@ export const useAPIFetch = (url, options = {}) => {
 
   // Optionally, retrieve a baseURL from runtime config if it's defined there
   // const baseURL = 'http://127.0.0.1:8000/'
-  const baseURL = "https://api.intstu.org/"
+  const baseURL = import.meta.env.VITE_ROOT_API
 
   // Use Nuxt 3's useFetch with the provided URL, options, and the baseURL
   const { data, error, pending, refresh } = useFetch(baseURL + url, {

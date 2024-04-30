@@ -163,7 +163,7 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
 </script>
 
 <template>
-    <div class="conatiner mx-auto p-4">
+    <div class="conatiner mx-auto p-4 dark:bg-gray-900">
     <div class="relative w-full  h-64">
       <h1 class=" pt-12 text-center text-black dark:text-gray-100 text-3xl">
         {{$t('institute_list.title')}}

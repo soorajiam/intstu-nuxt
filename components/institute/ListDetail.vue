@@ -10,7 +10,7 @@
           :href="localePath('/institutes/'+item.slug)"
         >{{ item.name }}</a>
   
-        <p class="text-sm dark:text-gray-100">{{ item.short_description }}...</p>
+        <p class="text-sm ">{{ item.short_description }}...</p>
       </div>
     </div>
   </template>

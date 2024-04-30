@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+    <nav class="bg-gray-100 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
       <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         <a :href="localePath('/')" class="flex items-center">
           <img src="/images/logo/intstu_logo.png" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
@@ -88,9 +88,12 @@
             </li>
             <button @click="changeTheme()" data-tooltip-target="tooltip-dark" type="button"
               class=" inline-flex items-center  mr-1 text-sm font-medium text-gray-500 rounded-lg dark:text-gray-400 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-              </svg>
+              
+
+           <SunIcon v-if="isDark" class="w-6 h-6"  />
+           <MoonIcon v-else class="w-6 h-6"  />
+           
+
             </button>
           </ul>
         </div>
@@ -113,7 +116,11 @@ if (process.client) {
 const mobileMenuOpen = ref(false);
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
+const isDark = ref(true);
+
 const { locales, locale, setLocale } = useI18n();
+
+import { SunIcon, MoonIcon } from '@heroicons/vue/24/solid'
 
 // console.log("locales: ", locale.value);
 //console.log("locales: ", locale.value);
@@ -126,36 +133,26 @@ const current_language = computed({
 });
 
 const changeTheme = () => {
-  theme.value = theme.value === "light" ? "dark" : "light";
-  localStorage.theme = theme.value;
-  if (
-    localStorage.theme === "dark" ||
-    (!("theme" in localStorage) &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
+  // toggle the theme; if light switch to dark and vice versa
+  document.documentElement.classList.toggle("dark");
+  // save the theme to local storage
+  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+  isDark.value = document.documentElement.classList.contains("dark");
+  
 };
 
 
 //console.log(current_language)
 
 const localePath = useLocalePath();
-let theme = ref("light");
+// let theme = ref("light");
 if (process.client) { // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 
-  localStorage.theme = theme.value;
-  if (
-    localStorage.theme === "dark" ||
-    (!("theme" in localStorage) &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
+  // set the theme on page load; default is dark if none is set
+  document.documentElement.classList.add(localStorage.theme || "dark");
+  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+  isDark.value = document.documentElement.classList.contains("dark");
+  
 
 }
 </script>
