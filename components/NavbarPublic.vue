@@ -113,7 +113,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const { locales, locale, setLocale } = useI18n();
 
-console.log("locales: ", locale.value);
+// console.log("locales: ", locale.value);
 
 const current_language = computed({
   get: () => locale.value,
