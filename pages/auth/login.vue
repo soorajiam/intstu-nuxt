@@ -93,10 +93,10 @@ const handleLogin = async () => {
         password: password.value,
       }),
     });
-    console.log(response);
+    //console.log(response);
     if (response.code === 200 || response.code === 201) {
       // Redirect to dashboard
-      console.log('adding data to store')
+      //console.log('adding data to store')
       userStore.login(
         response.data.id,
         response.data.token

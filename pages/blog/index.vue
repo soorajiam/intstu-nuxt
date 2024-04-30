@@ -31,7 +31,7 @@ const countries_response = useCustomFetch('country/dropdown/', {
         countries.value = countries_response.data.countries;
     })
     .catch((error) => {
-      console.log("Error");
+      //console.log("Error");
     });
 
 const ListPosts = () => {
@@ -47,8 +47,8 @@ const ListPosts = () => {
 // To process the data after it's fetched
 if (!pending.value && !error.value) {
   items.value = data.value.data.results;
-  console.log("---DATA---")
-  console.log(data);
+  //console.log("---DATA---")
+  //console.log(data);
   // Uncomment and adapt if needed
   // items.value.forEach(item => {
   //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
@@ -82,7 +82,7 @@ const getBlogPosts = () => {
       paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
     })
     .catch((error) => {
-      console.log("Error");
+      //console.log("Error");
     });
 };
 

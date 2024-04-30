@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@unlok-co/nuxt-stripe',
     '@pinia/nuxt',
+    'nuxt-gtag',
   ],
 
   stripe: {
@@ -29,6 +30,10 @@ export default defineNuxtConfig({
 
       }
     }
+  },
+
+  gtag: {
+    id: 'GTM-NT3J2ZB3'
   },
   
   postcss: {
