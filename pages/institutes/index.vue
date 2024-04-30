@@ -200,7 +200,7 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
             </div>
           </div>
         </form>
-        <p class="p-2 text-center text-black dark:text-gray-100"> {{$t('institute_list.description')}}</p>
+        <p class="p-2 text-center text-gray-900 dark:text-gray-100"> {{$t('institute_list.description')}}</p>
       </div>
     </div>
     <div class="flex flex-col md:grid md:grid-cols-1 gap-4 mt-6 md:w-full container mx-auto xl:w-4/5">
