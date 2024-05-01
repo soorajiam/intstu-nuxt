@@ -1,6 +1,31 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', 'sitemap.xml'],
+      ignore: ['/tak', '/konfiguration', '/checkout'],
+    },
+  },
+
+  site: {
+    url: 'http://intstu.com',
+  },
+  sitemap: {
+    sources: [
+      '/api/sitemap/blogs',
+      '/api/sitemap/institutes',
+  
+  ],
+    // cacheMaxAgeSeconds: 36000,
+    sitemaps: true,
+    defaultSitemapsChunkSize: 2000
+
+  },
 
   head: {
     meta: [
@@ -17,6 +42,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@unlok-co/nuxt-stripe',
     '@pinia/nuxt',
+    '@nuxtjs/sitemap',
     'nuxt-gtag',
   ],
 
