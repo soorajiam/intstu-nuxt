@@ -4,6 +4,16 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  // runtimeConfig: {
+  //   turnstile: {
+  //     // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
+  //     // environment variable.
+  //     secretKey: import.meta.env.VITE_TURNSTILE_SECRET_KEY,
+  //     addValidateEndpoint: true
+
+  //   },
+  // },
+
   // nitro: {
   //   // prerender: {
   //   //   crawlLinks: true,
@@ -44,7 +54,14 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-gtag',
+    '@nuxtjs/turnstile'
   ],
+
+  turnstile: {
+    siteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
+    secretKey: import.meta.env.VITE_TURNSTILE_SECRET_KEY,
+      addValidateEndpoint: true
+  },
 
   stripe: {
     // Server

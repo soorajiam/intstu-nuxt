@@ -37,6 +37,7 @@
                                 class="inline-block text-xs font-medium text-blue-500 hover:text-blue-600"
                                 href="#">Forgot your password?</a></div>
                     </div>
+                    <NuxtTurnstile v-if="password.length>2" class="py-3 px-7 mb-6" v-model="token" />
                     <a class="inline-block py-3 px-7 mb-6 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
                        @click="handleLogin">Sign In</a>
                     <p class="text-red-500 text-sm" v-if="error">{{ error }}</p>
@@ -65,6 +66,7 @@ const userStore = useUserStore();
 const email = ref('');
 const password = ref('');
 const error = ref('');
+const token = ref('');
 
 if (process.client) {
   if(userStore.isLoggedIn) {
@@ -82,7 +84,8 @@ function validateEmail() {
 
 const handleLogin = async () => {
   try {
-    // if (error.value || !email.value) return;
+    validateTurnstile();
+    if (error.value || !email.value) return;
     const response = await useCustomFetch('accounts/login/', {
       method: "POST",
       headers: {
@@ -106,6 +109,23 @@ const handleLogin = async () => {
     }
   } catch (error_obj) {
     error.value = "Error while user creation"
+  }
+};
+
+const validateTurnstile = async () => {
+  try {
+    const { data, error } = await useFetch('/_turnstile/validate', {
+      method: 'POST',
+      body: { token: token }
+    });
+
+    if (error.value) {
+      error.value = 'Validation failed. Please try again.';
+    } else {
+      console.log( 'Validation successful: ' + data.value.message);
+    }
+  } catch (err) {
+    error.value = 'Error: ' + err.message;
   }
 };
 </script>

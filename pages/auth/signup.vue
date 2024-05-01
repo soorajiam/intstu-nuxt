@@ -17,7 +17,7 @@
             @blur="validateEmail"
             required
               class="appearance-none block w-full p-3 leading-5 dark:text-black border border-coolGray-200 rounded-lg shadow-md  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 "
-              type="email" placeholder="dev@shuffle.dev">
+              type="email" placeholder="name@intstu.com">
           </div>
           <div class="mb-4">
             <label class="block mb-2  font-medium" for="">Password</label>
@@ -41,6 +41,7 @@
                 class="cursor-pointer inline-block text-xs font-medium text-blue-500 hover:text-blue-600" href="#">
                 Forgot your password?</a></div>
           </div>
+          <NuxtTurnstile v-if="password.length>2" class="py-3 px-7 mb-6" v-model="token" />
           <a class=" cursor-pointer inline-block py-3 px-7 mb-6 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
            @click="handleSignup">Sign up</a>
           <p class="text-center">
@@ -65,6 +66,8 @@ const userStore = useUserStore();
 const email = ref('');
 const password = ref('');
 const error = ref('');
+const token = ref('');
+
 if (process.client) {
   if(userStore.isLoggedIn) {
     navigateTo(localePath('/dashboard'))
@@ -81,7 +84,8 @@ function validateEmail() {
 
 const handleSignup = async () => {
   try {
-    // if (error.value || !email.value) return;
+    validateTurnstile();
+    if (error.value || !email.value) return;
     const response = await useCustomFetch('accounts/signup/', {
       method: "POST",
       headers: {
@@ -105,6 +109,23 @@ const handleSignup = async () => {
     }
   } catch (error_obj) {
     error.value = "Error while user creation"
+  }
+};
+
+const validateTurnstile = async () => {
+  try {
+    const { data, error } = await useFetch('/_turnstile/validate', {
+      method: 'POST',
+      body: { token: token }
+    });
+
+    if (error.value) {
+      error.value = 'Validation failed. Please try again.';
+    } else {
+      console.log( 'Validation successful: ' + data.value.message);
+    }
+  } catch (err) {
+    error.value = 'Error: ' + err.message;
   }
 };
 

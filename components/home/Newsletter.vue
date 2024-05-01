@@ -36,6 +36,7 @@
                                 class="py-3 px-5 w-full text-sm font-medium text-center rounded-lg border cursor-pointer bg-primary-700 border-primary-600 sm:rounded-none sm:rounded-r-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Subscribe</button>
                         </div>
                     </div>
+                    <NuxtTurnstile v-if="error=='' && email.length>3" class="py-3 px-7 mb-6 ml-8" v-model="token" />
                     <div
                         class="mx-auto max-w-screen-sm text-sm text-left text-gray-500 newsletter-form-footer dark:text-gray-300">
                         We care about the protection of your data. <a href="#"
@@ -52,31 +53,61 @@
 
 const email = ref('');
 const error = ref('');
+const token = ref('');
 
-const subscribe = async () => {
-    try {
-        const response = await useCustomFetch('marketing/newsletter/subscribe/', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email.value,
-            }),
-        });
-        //console.log(response);
-        error.value = '';
-    } catch (error_message) {
-        //console.log("Error");
-        error.value = 'Invalid email or already subscribed';
-    }
+    const subscribe = async () => {
+        validateTurnstile();
+        if (error.value == '' && email.value.length>3){
+        try {
+            
+            const response = await useCustomFetch('marketing/newsletter/subscribe/', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email.value,
+                }),
+            });
+            //console.log(response);
+            error.value = '';
+        } catch (error_message) {
+            //console.log("Error");
+            error.value = 'Invalid email or already subscribed';
+        }}
 };
 
-function validateEmail() {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
-        error.value = 'Please enter a valid email address';
+watch(email, (newValue, oldValue) => {
+  console.log(newValue); // Log the current value for debugging
+
+  if (newValue.length === 0){
+    error.value = ''; // Clear error if there is no input
+    return; // Exit early if the email is empty
+  }
+
+  // Validate the email format
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(newValue)) {
+    error.value = 'Please enter a valid email address'; // Set error if email is invalid
+  } else {
+    error.value = ''; // Clear error if email is valid
+  }
+});
+
+
+const validateTurnstile = async () => {
+  try {
+    const { data, error } = await useFetch('/_turnstile/validate', {
+      method: 'POST',
+      body: { token: token }
+    });
+
+    if (error.value) {
+      error.value = 'Validation failed. Please try again.';
     } else {
-        error.value = '';
+      console.log( 'Validation successful: ' + data.value.message);
     }
-}
+  } catch (err) {
+    error.value = 'Error: ' + err.message;
+  }
+};
 </script>
