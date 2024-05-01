@@ -1,13 +1,12 @@
 export default defineSitemapEventHandler(async (event) => {
     try {
       // Fetching data from the external API
-      const blogs = await $fetch('https://api.intstu.org/institutes/institutions/?limit=50000');
+      const institutes = await $fetch('https://api.intstu.org/institutes/institutions/?limit=50000');
   
       // Assuming 'blogs' is an array of blog objects with relevant properties
-      console.log('Fetched blogs:', blogs);
-      return blogs.data.results.map(blog => {
+      return institutes.data.results.map(blog => {
         return {
-          loc: `/blog/${blog.slug}`, // Assuming each blog has a 'slug' property
+          loc: `/institutes/${blog.slug}`, // Assuming each blog has a 'slug' property
           lastmod: new Date().toISOString(), // Assuming each blog has a 'modifiedAt' property
           _i18nTransform: true, // Enable i18n transformation
         };

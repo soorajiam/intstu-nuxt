@@ -59,6 +59,8 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
 
 </script>
 
+
+
 <template>
 
   <main class="pb-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased mb-12">

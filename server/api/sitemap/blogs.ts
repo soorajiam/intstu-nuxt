@@ -4,7 +4,6 @@ export default defineSitemapEventHandler(async (event) => {
     const blogs = await $fetch('https://api.intstu.org/blogs/blog/?limit=100');
 
     // Assuming 'blogs' is an array of blog objects with relevant properties
-    console.log('Fetched blogs:', blogs);
     return blogs.data.results.map(blog => {
       return {
         loc: `/blog/${blog.slug}`, // Assuming each blog has a 'slug' property
