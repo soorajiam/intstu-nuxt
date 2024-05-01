@@ -21,7 +21,7 @@ export default defineNuxtConfig({
       '/api/sitemap/institutes',
   
   ],
-    // cacheMaxAgeSeconds: 36000,
+    cacheMaxAgeSeconds: 36000,
     sitemaps: true,
     defaultSitemapsChunkSize: 2000
 
