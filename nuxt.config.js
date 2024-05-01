@@ -4,13 +4,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  nitro: {
-    prerender: {
-      crawlLinks: true,
-      routes: ['/', 'sitemap.xml'],
-      ignore: ['/tak', '/konfiguration', '/checkout'],
-    },
-  },
+  // nitro: {
+  //   // prerender: {
+  //   //   crawlLinks: true,
+  //   //   routes: ['/', 'sitemap.xml'],
+  //   //   ignore: ['/tak', '/konfiguration', '/checkout'],
+  //   // },
+  // },
 
   site: {
     url: 'http://intstu.com',
