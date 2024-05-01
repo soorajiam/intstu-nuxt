@@ -56,6 +56,16 @@ const response_list = useCustomFetch("blogs/blog/?limit=3", {
 // // return marked.parse(`# h1 Heading`)
 // })
 
+defineOgImageComponent('NuxtSeo', {
+  headline: 'Blog',
+  title: blog.value.title,
+  description: blog.value.description,
+  siteName:'intstu.com',
+  siteLogo: '/images/logo/intstu_logo.png',
+  colorMode: 'dark',
+  ogImage: '/images/logo/intstu_logo.png',
+})
+
 
 </script>
 

@@ -54,7 +54,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-gtag',
-    '@nuxtjs/turnstile'
+    '@nuxtjs/turnstile',
+    'nuxt-og-image'
   ],
 
   turnstile: {
