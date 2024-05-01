@@ -14,6 +14,7 @@ let countries = ref("");
 let selectedCountry = ref("");
 selectedCountry.value = "all";
 
+
 const route = useRoute();
 if (route.query.page) {
   page.value = parseInt(route.query.page);
@@ -163,6 +164,7 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
 </script>
 
 <template>
+   
     <div class="conatiner mx-auto p-4 dark:bg-gray-900">
     <div class="relative w-full  h-64">
       <h1 class=" pt-12 text-center text-black dark:text-gray-100 text-3xl">
@@ -239,4 +241,6 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
     </div>
     
   </div>
+
+ 
 </template>
