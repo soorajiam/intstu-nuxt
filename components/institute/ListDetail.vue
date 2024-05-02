@@ -24,6 +24,8 @@
     <p class="text-sm p-2">{{ item.short_description }}...</p>
   </div>
 </template>
+
+
 <script setup>
 const props = defineProps({
   item: {
@@ -31,6 +33,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(['openLoginModal']);
 
 import { PlusCircleIcon } from '@heroicons/vue/24/solid'
 import { useUserStore } from "~/store/userStore"
@@ -40,7 +44,8 @@ const handleAddToList = () => {
   if (userStore.isLoggedIn) {
     console.log('Add to list')
   } else {
-    console.log('Please login')
+    // emit event to parent
+    emit('openLoginModal')
   
 }
 }

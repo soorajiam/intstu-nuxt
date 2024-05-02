@@ -2,16 +2,19 @@
 import { ref, watch } from "vue";
 import debounce from 'lodash.debounce'
 
-var search = ref("");
-var items = ref("");
-var next = ref("");
-var previous = ref("");
+const search = ref("");
+const items = ref("");
+const next = ref("");
+const previous = ref("");
 const offset = computed(() => page.value * 10);
-let paginationLength = ref(1);
-let page = ref(1);
+const paginationLength = ref(1);
+const page = ref(1);
+let url = ref("");
 
-let countries = ref("");
-let selectedCountry = ref("");
+const showLoginModal = ref(false);
+
+const countries = ref("");
+const selectedCountry = ref("");
 selectedCountry.value = "all";
 
 
@@ -34,12 +37,11 @@ if (route.query.page) {
       //console.log("Error");
     });
 
-var resultCount = ref(0);
+const resultCount = ref(0);
 const getInstituteList = () => {
   //Function to handle registration
   items.value = [];
-
-  let url =
+   url =
     "institutes/institutions/?limit=10&" +
     "&offset=" +
     offset.value +
@@ -57,7 +59,7 @@ const getInstituteList = () => {
   })
     .then((response) => {
       items.value = response.data.results;
-      //console.log(response);
+      console.log(response);
       //console.log(items);
       next.value = response.data.next;
       previous.value = response.data.previous;
@@ -161,9 +163,39 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
   }
 });
 
+const openLoginModal = () => {
+  // Open login modal
+
+  showLoginModal.value = !showLoginModal.value;
+  
+  // document.getElementById("info-popup").classList.add("block");
+  // document.getElementById("info-popup").classList.remove("hidden");
+};
+
 </script>
 
 <template>
+
+<div v-if="showLoginModal" id="info-popup" tabindex="-1" class="  overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 p-8">
+      <div class="text-sm font-light text-gray-500 dark:text-gray-400">
+        <h3 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">Login to prioritize</h3>
+        <p>
+          Creating an account lets you build a personalized shortlist of universities, making it easier to compare programs, track application deadlines, and access tailored advice to guide your academic journey. Sign up now to streamline your university search!
+        </p>
+      </div>
+      <div class="flex justify-between items-center pt-0 space-y-4 sm:space-y-0">
+        <a href="/auth/login/" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create List?</a>
+        <div class="flex items-center space-x-4">
+          <button @click="openLoginModal" id="close-modal" type="button" class="py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
+          <a href="/auth/signup/" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
    
     <div class="conatiner mx-auto p-4 dark:bg-gray-900">
     <div class="relative w-full  h-64">
@@ -210,15 +242,15 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
 
 
       <div v-for="item in items" :key="item.id">
-        <InstituteListDetail :item="item" />
+        <InstituteListDetail :item="item" @open-login-modal="openLoginModal" />
       </div>
 
 
       <div class="flex flex-col items-center mt-8">
       <!-- Help text -->
       <span class="text-sm text-gray-700 dark:text-gray-400">
-        Showing <span class="font-semibold text-gray-900 dark:text-white">{{ offset }}</span> to <span
-          class="font-semibold text-gray-900 dark:text-white">{{ (offset + 10) }}</span> of <span
+        Showing <span class="font-semibold text-gray-900 dark:text-white">{{ offset - 9 }}</span> to <span
+          class="font-semibold text-gray-900 dark:text-white">{{ offset>resultCount? resultCount: offset  }}</span> of <span
           class="font-semibold text-gray-900 dark:text-white">{{ resultCount }}</span> Entries
       </span>
       <!-- Buttons -->
@@ -241,6 +273,8 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
     </div>
     
   </div>
+
+ 
 
  
 </template>
