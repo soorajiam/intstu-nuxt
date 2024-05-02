@@ -14,13 +14,15 @@ export default defineNuxtConfig({
   //   },
   // },
 
-  // nitro: {
-  //   // prerender: {
-  //   //   crawlLinks: true,
-  //   //   routes: ['/', 'sitemap.xml'],
-  //   //   ignore: ['/tak', '/konfiguration', '/checkout'],
-  //   // },
-  // },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/blog', 'sitemap.xml', '/institutes'],
+      ignore: ['/auth', ''],
+    },
+  },
+
+  
 
   site: {
     url: 'http://intstu.com',
