@@ -83,6 +83,8 @@ const ListInstitutes = async () => {
     },
   })
 
+  console.log(data);
+
 // To process the data after it's fetched
 if (!pending.value && !error.value) {
   items.value = data.value.data.results;
@@ -189,7 +191,7 @@ const openLoginModal = () => {
         <a href="/auth/login/" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create List?</a>
         <div class="flex items-center space-x-4">
           <button @click="openLoginModal" id="close-modal" type="button" class="py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-          <a href="/auth/signup/" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
+          <a :href="localePath('/auth/signup/')" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
         </div>
       </div>
     </div>
