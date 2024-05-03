@@ -27,7 +27,7 @@
               class="appearance-none block w-full p-3 leading-5 dark:text-black border border-coolGray-200 rounded-lg shadow-md  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               type="password" placeholder="************">
           </div>
-          <p class="text-red-500 text-sm" v-if="error">{{ error }}</p>
+          <p class="text-red-500 text-sm" v-if="error_message">{{ error_message }}</p>
           <div class="flex flex-wrap items-center justify-between mb-6">
             <div class="w-full md:w-1/2">
               <label class="relative inline-flex items-center">
@@ -43,7 +43,7 @@
           </div>
           <NuxtTurnstile v-if="password.length>2" class="py-3 px-7 mb-6" v-model="token" />
           <a class=" cursor-pointer inline-block py-3 px-7 mb-6 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
-           @click="handleSignup">Sign up</a>
+           @click="handleSupaBaseSignup">Sign up</a>
           <p class="text-center">
             <span class="text-xs font-medium">Already have an account? </span>
             <NuxtLink class="ml-2 inline-block text-xs font-medium text-blue-500 hover:text-blue-600 hover:underline"
@@ -65,7 +65,7 @@ const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
-const error = ref('');
+const error_message = ref('');
 const token = ref('');
 
 if (process.client) {
@@ -76,16 +76,40 @@ if (process.client) {
 
 function validateEmail() {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
-        error.value = '';
+      error_message.value = '';
     } else {
-      error.value = 'Please enter a valid email address';
+      error_message.value = 'Please enter a valid email address';
     }
 }
+const client = useSupabaseClient()
+const handleSupaBaseSignup = async () => {
+  validateTurnstile();
+  if (error_message.value || !email.value) {
+    console.error('Error:', error_message.value)
+    return
+  }
+  const { user, session, error } = await client.auth.signUp({
+    email: email.value,
+    password: password.value,
+  })
+  if (error) {
+    console.error('Error:', error.message)
+    error_message.value = error.message
+  } else {
+    console.log('User:', user)
+    console.log('Session:', session)
+    userStore.login(user.id, session.access_token);
+    navigateTo(localePath('/dashboard'));
+  }
+};
 
 const handleSignup = async () => {
+
+
+
   try {
     validateTurnstile();
-    if (error.value || !email.value) return;
+    if (error_message.value || !email.value) return;
     const response = await useCustomFetch('accounts/signup/', {
       method: "POST",
       headers: {
@@ -108,7 +132,7 @@ const handleSignup = async () => {
       navigateTo(localePath('/dashboard'))
     }
   } catch (error_obj) {
-    error.value = "Error while user creation"
+    error_message.value = "Error while user creation"
   }
 };
 
@@ -119,13 +143,13 @@ const validateTurnstile = async () => {
       body: { token: token }
     });
 
-    if (error.value) {
-      error.value = 'Validation failed. Please try again.';
+    if (error) {
+      error_message.value = 'Validation failed. Please try again.';
     } else {
       console.log( 'Validation successful: ' + data.value.message);
     }
   } catch (err) {
-    error.value = 'Error: ' + err.message;
+    error_message.value = 'Error: ' + err.message;
   }
 };
 

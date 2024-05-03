@@ -14,6 +14,36 @@ export default defineNuxtConfig({
   //   },
   // },
 
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+    }
+  },
+
+  modules: [
+    '@nuxtjs/i18n',
+    '@nuxtjs/tailwindcss',
+    '@unlok-co/nuxt-stripe',
+    '@pinia/nuxt',
+    '@nuxtjs/sitemap',
+    'nuxt-gtag',
+    '@nuxtjs/turnstile',
+    'nuxt-og-image',
+    '@nuxtjs/supabase'
+  ],
+
+  supabase: {
+    redirect: false
+    // redirectOptions: {
+    //   login: '/en/login',
+    //   callback: '/en/confirm',
+    //   include: undefined,
+    //   exclude: ['/en/auth/signup'],
+    //   cookieRedirect: false,
+    // }
+  },
+
   nitro: {
     prerender: {
       crawlLinks: true,
@@ -49,22 +79,19 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   
-  modules: [
-    '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
-    '@unlok-co/nuxt-stripe',
-    '@pinia/nuxt',
-    '@nuxtjs/sitemap',
-    'nuxt-gtag',
-    '@nuxtjs/turnstile',
-    'nuxt-og-image'
-  ],
+
 
   turnstile: {
     siteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
     secretKey: import.meta.env.VITE_TURNSTILE_SECRET_KEY,
       addValidateEndpoint: true
   },
+
+  // supabase: {
+  //   url: import.meta.env.VITE_SUPABASE_URL,
+  //   key: import.meta.env.VITE_SUPABASE_KEY,
+  // },
+  
 
   stripe: {
     // Server

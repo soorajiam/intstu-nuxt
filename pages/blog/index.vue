@@ -152,6 +152,9 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
   }
 });
 
+const user = useSupabaseUser()
+console.log(user.value)
+
 </script>
 
 

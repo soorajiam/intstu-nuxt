@@ -38,9 +38,9 @@
                                 href="#">Forgot your password?</a></div>
                     </div>
                     <NuxtTurnstile v-if="password.length>2" class="py-3 px-7 mb-6" v-model="token" />
-                    <a class="inline-block py-3 px-7 mb-6 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
-                       @click="handleLogin">Sign In</a>
-                    <p class="text-red-500 text-sm" v-if="error">{{ error }}</p>
+                    <a class="cursor-pointer inline-block py-3 px-7 mb-6 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
+                       @click="handleSupaBaseLogin">Sign In</a>
+                    <p class="text-red-500 text-sm" v-if="error_message">{{ error_message }}</p>
                     <p class="text-center">
                         <span class="text-xs font-medium">Don't have an account? </span>
                         <NuxtLink
@@ -65,8 +65,10 @@ const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
-const error = ref('');
+const error_message = ref('');
 const token = ref('');
+
+const client = useSupabaseClient();
 
 if (process.client) {
   if(userStore.isLoggedIn) {
@@ -76,16 +78,33 @@ if (process.client) {
 
 function validateEmail() {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
-        error.value = '';
+      error_message.value = '';
     } else {
-      error.value = 'Please enter a valid email address';
+      error_message.value = 'Please enter a valid email address';
     }
 }
+
+const handleSupaBaseLogin = async () => {
+  validateTurnstile();
+  if (error_message.value || !email.value) return;
+  const { data, error } = await client.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    error_message.value = error.message;
+  } else {
+    console.log('data:', data);
+    userStore.login(data.user.id, data.session.access_token);
+    navigateTo(localePath('/dashboard'));
+  }
+};
 
 const handleLogin = async () => {
   try {
     validateTurnstile();
-    if (error.value || !email.value) return;
+    if (error_message.value || !email.value) return;
     const response = await useCustomFetch('accounts/login/', {
       method: "POST",
       headers: {
@@ -108,7 +127,7 @@ const handleLogin = async () => {
       navigateTo(localePath('/dashboard'))
     }
   } catch (error_obj) {
-    error.value = "Error while user creation"
+    error_message.value = "Error while user creation"
   }
 };
 
