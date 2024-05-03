@@ -47,7 +47,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['en/blog', 'sitemap.xml', 'en/institutes', 'en/auth'],
+      routes: ['blog/*', 'sitemap.xml', '/institutes/*','/en'],
       ignore: ['/auth', ''],
     },
   },
@@ -138,12 +138,6 @@ export default defineNuxtConfig({
         name: 'English',
         file: 'en-US.json',
       },
-      // {
-      //   code: 'fr',
-      //   iso: 'fr-FR',
-      //   name: 'Français',
-      //   file: 'fr-FR.json',
-      // },
       {
         code: 'ml',
         iso: 'ml-IN',
