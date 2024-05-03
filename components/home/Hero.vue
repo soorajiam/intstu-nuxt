@@ -57,9 +57,10 @@
                   <a href="#" class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
                 </div>
                 <NuxtTurnstile v-if="password.length>2" class="py-3 px-7 mb-6" v-model="token" />
-                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-700">Create an account</button>
+                <div class="text-sm text-red-500 dark:text-red-400">{{ error_message }}</div>
+                <button @click.prevent="handleSupaBaseSignup" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-700">Create an account</button>
                 <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                  Already a memeber? <a href="#" class="text-blue-700 hover:underline dark:text-blue-500">Log In</a>
+                  Already a memeber? <a :href="localePath('/auth/login')"  class="text-blue-700 hover:underline dark:text-blue-500">Log In</a>
                 </div>
             </form>
         </div>                
@@ -68,10 +69,15 @@
 </template>
 
 <script setup>
+import { useUserStore } from '~/store/userStore';
+const userStore = useUserStore();
+const client = useSupabaseClient()
+const localePath = useLocalePath();
+
 const password = ref('');
 const email = ref('');
 const token = ref('');
-const error = ref('');
+const error_message = ref('');
 
 const validateTurnstile = async () => {
   try {
@@ -86,7 +92,42 @@ const validateTurnstile = async () => {
       console.log( 'Validation successful: ' + data.value.message);
     }
   } catch (err) {
-    error.value = 'Error: ' + err.message;
+    error.error_message = 'Error: ' + err.message;
+  }
+};
+
+
+
+
+function validateEmail() {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
+      error_message.value = '';
+    } else {
+      error_message.value = 'Please enter a valid email address';
+    }
+}
+
+
+const handleSupaBaseSignup = async () => {
+    error_message.value = '';
+  validateTurnstile();
+  validateEmail()
+  if (error_message.value || !email.value) {
+    console.error('Error:', error_message.value)
+    return
+  }
+  const { data, error } = await client.auth.signUp({
+    email: email.value,
+    password: password.value,
+  })
+  if (error) {
+    console.error('Error:', error.message)
+    error_message.value = error.message
+  } else {
+    console.log('User:', data.user)
+    console.log('Session:', data.session)
+    userStore.login(data.user.id, data.session.access_token);
+    navigateTo(localePath('/dashboard'));
   }
 };
 </script>

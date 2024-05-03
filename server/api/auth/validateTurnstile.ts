@@ -1,4 +1,5 @@
 // server/api/validateTurnstile.ts
+//Note being used, using default _turnstile endpoint
 
 export default defineEventHandler(async (event) => {
     const { token } = await readBody(event)

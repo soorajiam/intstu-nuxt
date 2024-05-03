@@ -16,16 +16,31 @@
           </option>
         </select> -->
         <div class="flex items-center lg:order-2">
-          <NuxtLink :to="localePath('/auth/login/')"
-            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{{ $t('home.log_in') }}</NuxtLink>
-          <NuxtLink :to="localePath('/auth/signup')"
-            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{{ $t('home.sign_up') }}
-          </NuxtLink>
+          <div v-if="!userStore.isLogged">
+            <NuxtLink :to="localePath('/auth/login/')"
+              class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+              {{ $t('home.log_in') }}</NuxtLink>
+            <NuxtLink :to="localePath('/auth/signup')"
+              class="text-gr ay-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+              {{ $t('home.sign_up') }}
+            </NuxtLink>
+          </div>
+
+          <div v-else>
+            <NuxtLink :to="localePath('/dashboard')"
+              class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+              {{ $t('home.dashboard') }}</NuxtLink>
+            <NuxtLink :to="localePath('/auth/logout')"
+              class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 lg:px-5 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+              {{ $t('home.log_out') }}</NuxtLink>
+
+          </div>
+
           <button @click="mobileMenuOpen = !mobileMenuOpen" data-collapse-toggle="mobile-menu-2" type="button"
             class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="mobile-menu-2" aria-expanded="false">
+            aria-controls="mobile-menu-2" aria-expanded="false">̦
             <span class="sr-only">Open main menu</span>
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" ̵ xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                 clip-rule="evenodd"></path>
@@ -43,11 +58,13 @@
 
             <li>
               <a :href="localePath('/blog/')"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{ $t('home.blog') }}</a>
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{
+          $t('home.blog') }}</a>
             </li>
             <li>
               <a :href="localePath('/institutes/')"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{ $t('home.institutes') }}</a>
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{
+          $t('home.institutes') }}</a>
             </li>
 
 
@@ -56,9 +73,7 @@
                 class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{
           $t('home.contact') }}</a>
             </li>
-            <button 
-            @click="changeTheme()"
-            data-tooltip-target="tooltip-dark" type="button"
+            <button @click="changeTheme()" data-tooltip-target="tooltip-dark" type="button"
               class="inline-flex items-center p-2 mr-1 text-sm font-medium text-gray-500 rounded-lg dark:text-gray-400 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -73,11 +88,13 @@
 
             <li>
               <a :href="localePath('/blog/')"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{ $t('home.blog') }}</a>
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{
+          $t('home.blog') }}</a>
             </li>
             <li>
               <a :href="localePath('/institutes/')"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{ $t('home.institutes') }}</a>
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-600 lg:p-0 dark:text-gray-400 lg:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 lg:dark:hover:bg-transparent dark:border-gray-700">{{
+          $t('home.institutes') }}</a>
             </li>
 
 
@@ -88,11 +105,11 @@
             </li>
             <button @click="changeTheme()" data-tooltip-target="tooltip-dark" type="button"
               class=" inline-flex items-center  mr-1 text-sm font-medium text-gray-500 rounded-lg dark:text-gray-400 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-              
 
-           <SunIcon v-if="isDark" class="w-6 h-6"  />
-           <MoonIcon v-else class="w-6 h-6"  />
-           
+
+              <SunIcon v-if="isDark" class="w-6 h-6" />
+              <MoonIcon v-else class="w-6 h-6" />
+
 
             </button>
           </ul>
@@ -108,11 +125,9 @@
 <script setup>
 import { ref } from "vue";
 
+import { useUserStore } from '~/store/userStore';
+const userStore = useUserStore();
 
-const loggedIn = ref(false);
-if (process.client) {
-  loggedIn.value = localStorage.getItem("token") ? true : false;
-}
 const mobileMenuOpen = ref(false);
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -138,21 +153,28 @@ const changeTheme = () => {
   // save the theme to local storage
   localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
   isDark.value = document.documentElement.classList.contains("dark");
-  
+
 };
 
 
 //console.log(current_language)
 
 const localePath = useLocalePath();
+import { onMounted, watchEffect } from 'vue'
 // let theme = ref("light");
 if (process.client) { // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 
   // set the theme on page load; default is dark if none is set
-  document.documentElement.classList.add(localStorage.theme || "dark");
-  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-  isDark.value = document.documentElement.classList.contains("dark");
-  
+
+  onMounted(() => {
+    document.documentElement.classList.add(localStorage.theme || "dark");
+    localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    //isDark.value = document.documentElement.classList.contains("dark");
+  })
+
 
 }
+
+
+
 </script>
