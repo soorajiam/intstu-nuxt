@@ -132,33 +132,33 @@ export default defineNuxtConfig({
     },
   },
 
-  i18n: {
-    lazy: false,
-    langDir: 'locales/',
-    strategy: 'no_prefix',
-    defaultLocale: 'en-US',
-    paths:{
-      en: '/',
-      ml: '/ml/'
-    },
+  // i18n: {
+  //   lazy: false,
+  //   langDir: 'locales/',
+  //   strategy: 'no_prefix',
+  //   defaultLocale: 'en-US',
+  //   paths:{
+  //     en: '/',
+  //     ml: '/ml/'
+  //   },
     
 
-    locales: [
-      {
-        code: 'en',
-        iso: 'en-US',
-        name: 'English',
-        file: 'en-US.json',
-      },
-      {
-        code: 'ml',
-        iso: 'ml-IN',
-        name: 'Malayalam',
-        file: 'ml-IN.json',
-      },
-    ],
+  //   locales: [
+  //     {
+  //       code: 'en',
+  //       iso: 'en-US',
+  //       name: 'English',
+  //       file: 'en-US.json',
+  //     },
+  //     {
+  //       code: 'ml',
+  //       iso: 'ml-IN',
+  //       name: 'Malayalam',
+  //       file: 'ml-IN.json',
+  //     },
+  //   ],
 
 
-  }
+  // }
   
 })
