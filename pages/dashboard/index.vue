@@ -1,12 +1,13 @@
 <template>
 
-    <DashboardNavBar />
+
 
 <h1>Dashboard</h1>
 </template>
 
 <script setup>
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
+  layout: 'dashboard',
 })
 </script>

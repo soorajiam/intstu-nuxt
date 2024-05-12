@@ -30,7 +30,9 @@ export default defineNuxtConfig({
     'nuxt-gtag',
     '@nuxtjs/turnstile',
     'nuxt-og-image',
-    '@nuxtjs/supabase'
+    '@nuxtjs/supabase',
+    '@stefanobartoletti/nuxt-social-share',
+    'nuxt-tiptap-editor'
   ],
 
   supabase: {
@@ -52,10 +54,17 @@ export default defineNuxtConfig({
   //   },
   // },
 
+  tiptap: {
+    prefix: "Tiptap", //prefix for Tiptap imports, composables not included
+    lowlight: {
+      theme: "github-dark",
+    },
+  },
+
   
 
   site: {
-    url: 'http://intstu.com',
+    // url: 'http://intstu.com',
   },
   sitemap: {
     sources: [
@@ -124,13 +133,16 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    lazy: true,
+    lazy: false,
     langDir: 'locales/',
+    strategy: 'no_prefix',
     defaultLocale: 'en-US',
-    strategy: 'prefix_except_default',
-    vuei18n: {
-      fallbackLocale: 'en-US',
+    paths:{
+      en: '/',
+      ml: '/ml/'
     },
+    
+
     locales: [
       {
         code: 'en',

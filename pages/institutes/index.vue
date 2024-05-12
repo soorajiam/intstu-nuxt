@@ -17,6 +17,18 @@ const countries = ref("");
 const selectedCountry = ref("");
 selectedCountry.value = "all";
 
+useSeoMeta({
+  title: 'Intstu - Institute List',
+  ogTitle: 'Intstu - Institute List',
+  description: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  ogDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  ogImage: '/images/logo/intstu_logo.png',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Intstu - Institute List',
+  twitterDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  twitterImage: '/images/logo/intstu_logo.png',
+
+})
 
 const route = useRoute();
 if (route.query.page) {
