@@ -152,8 +152,19 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
   }
 });
 
-const user = useSupabaseUser()
-console.log(user.value)
+
+
+useSeoMeta({
+  title: 'Intstu - Blogs and News',
+  description: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
+  ogTitle: 'Intstu - Blogs and News',
+  ogDescription: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
+  ogImage: '/images/logo/intstu_logo.png',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Intstu - Blogs and News',
+  twitterDescription: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
+  twitterImage: '/images/logo/intstu_logo.png'
+})
 
 </script>
 

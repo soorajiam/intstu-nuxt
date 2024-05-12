@@ -88,7 +88,7 @@ const handleSupaBaseSignup = async () => {
     console.error('Error:', error_message.value)
     return
   }
-  const { user, session, error } = await client.auth.signUp({
+  const { data, error } = await client.auth.signUp({
     email: email.value,
     password: password.value,
   })
@@ -96,9 +96,10 @@ const handleSupaBaseSignup = async () => {
     console.error('Error:', error.message)
     error_message.value = error.message
   } else {
-    console.log('User:', user)
-    console.log('Session:', session)
-    userStore.login(user.id, session.access_token);
+    console.log('User:', data.user)
+    console.log('Session:', data.session)
+    userStore.login(data.user.id, data.session.access_token);
+    // handleSignup();
     navigateTo(localePath('/dashboard'));
   }
 };
@@ -108,7 +109,7 @@ const handleSignup = async () => {
 
 
   try {
-    validateTurnstile();
+    // validateTurnstile();
     if (error_message.value || !email.value) return;
     const response = await useCustomFetch('accounts/signup/', {
       method: "POST",
@@ -118,13 +119,14 @@ const handleSignup = async () => {
       body: JSON.stringify({
         email: email.value,
         password: password.value,
+        supabase_id: userStore.getUser(),
       }),
     });
     //console.log(response);
     if (response.code === 200 || response.code === 201) {
       // Redirect to dashboard
       //console.log('adding data to store')
-      userStore.login(
+      userStore.server_login(
         response.data.id,
         response.data.token
       );

@@ -7,7 +7,9 @@ export const useUserStore = defineStore({
     state: () => ({
         isLoggedIn: false,
         user_id: null,
-        token: null
+        token: null,
+        server_token: null,
+        server_user_id: null,
     }),
 
     getters: {
@@ -19,6 +21,12 @@ export const useUserStore = defineStore({
         },
         getToken: (state) => {
             return state.token
+        },
+        getServerToken: (state) => {
+            return state.server_token
+        },
+        getServerUser: (state) => {
+            return state.server_user_id
         }
     },
 
@@ -34,13 +42,28 @@ export const useUserStore = defineStore({
             localStorage.setItem('token', token)
         },
 
+        server_login(user_id, token) {
+            this.isLoggedIn = true
+            this.server_user_id = user_id
+            this.server_token = token
+
+            localStorage.setItem('server_user_id', user_id)
+            localStorage.setItem('server_token', token)
+        },
+
         logout() {
             this.isLoggedIn = false
             this.user_id = null
             this.token = null
+            this.server_user_id = null
+            this.server_token = null
 
             localStorage.removeItem('user_id')
             localStorage.removeItem('token')
+            localStorage.removeItem('server_user_id')
+            localStorage.removeItem('server_token')
+
+
         }
     }
 })

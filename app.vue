@@ -9,6 +9,7 @@
     <NuxtPage />
     
   </NuxtLayout>
+
   </div>
 
 </template>
@@ -21,13 +22,19 @@ const userStore = useUserStore();
 
 if (process.client) {
   if (localStorage.getItem('token')) {
-  //console.log('token found');
+
   userStore.login(
     localStorage.getItem('user_id'),
     localStorage.getItem('token'),
   );
+
+  userStore.server_login(
+    localStorage.getItem('server_user_id'),
+    localStorage.getItem('server_token'),
+  );
+  }
 }
-}
+
 
 
 import { onMounted, watchEffect } from 'vue'
@@ -47,6 +54,9 @@ watchEffect(() => {
   //isDark.value = document.documentElement.classList.contains("dark");
 })
 }
+
+
+
 
 
 
