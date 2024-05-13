@@ -6,26 +6,30 @@ const name = ref(route.params.name)
 const data = ref("");
 const paragraphs = ref("");
 
+const details = ref({})
 
 
 
 
-const response = useCustomFetch("institutes/institutions/public/" + name.value + "/", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
-  .then((response) => {
-    data.value = response.data;
-    paragraphs.value = data.value.description.split("\n\n");
 
-    //console.log(data.value);
 
-  })
-  .catch((error) => {
-    //console.log(error.response);
-  });
+
+  const getInstitutionData = async ()  => {
+    const {data, error} = await useAPIFetch("institutes/institutions/public/" + name.value + "/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    if (error.value) {
+      console.log(error.value);
+    } else {
+      details.value = data.value.data;
+      console.log(details.value.name);
+      paragraphs.value = details.value.description.split("\n\n");
+    }
+  }
+  getInstitutionData();
 
 
 useSeoMeta({
@@ -50,25 +54,25 @@ useSeoMeta({
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
       <div class="max-w-screen-lg text-gray-500 sm:text-lg dark:text-gray-400">
-        <h2 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">{{ data.name }}</h2>
+        <h2 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">{{ details.name }}</h2>
 
 
-        <a :href="data.website"
+        <a :href="details.website"
           class="inline-flex items-center font-medium text-primary-600 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-700">
-          {{ data.website }}
+          {{ details.website }}
           <svg class="ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
               d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
               clip-rule="evenodd"></path>
           </svg>
         </a>
-        <p class="mb-4 font-light">{{ data.address }}</p>
+        <p class="mb-4 font-light">{{ details.address }}</p>
       </div>
       <p class="">Share:</p>
       <div class="flex flex-row gap-2">
         
         <SocialShare v-for="network in ['facebook', 'twitter', 'linkedin', 'email', 'reddit', 'whatsapp']"
-          :key="network" :network="network" :title="data.name + ' in Intstu'" :styled="true" :label="false"
+          :key="network" :network="network" :title="details.name + ' in Intstu'" :styled="true" :label="false"
           class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg dark:text-gray-400 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700" />
       </div>
      
