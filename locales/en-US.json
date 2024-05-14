@@ -8,6 +8,8 @@
         "institutes": "Institutes",
         "log_in": "Log in",
         "sign_up": "Sign up",
+        "dashboard": "Dashboard",
+        "log_out": "Logout",
         "hero": {
             "heading": "Find the best institutes for your needs",
             "description": "Intstu is a community that aims to make the process of finding the best institutes for your needs easier.",

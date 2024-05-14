@@ -33,15 +33,15 @@ const details = ref({})
 
 
 useSeoMeta({
-  title: () => 'Intstu | ' + data.value.name,
-  description: () => data.value.short_description,
-  image: () => data.value.image,
-  ogTitle: () => 'Intstu | ' + data.value.name,
-  ogDescription: () => data.value.short_description,
-  ogImage: () => data.value.image,
-  twitterTitle: () => 'Intstu | ' + data.value.name,
-  twitterDescription: () => data.value.short_description,
-  twitterImage: () => data.value.image,
+  title: () => 'Intstu | ' + details.value.name,
+  description: () => details.value.short_description,
+  image: () => details.value.image,
+  ogTitle: () => 'Intstu | ' + details.value.name,
+  ogDescription: () => details.value.short_description,
+  ogImage: () => details.value.image,
+  twitterTitle: () => 'Intstu | ' + details.value.name,
+  twitterDescription: () => details.value.short_description,
+  twitterImage: () => details.value.image,
 })
 
 
