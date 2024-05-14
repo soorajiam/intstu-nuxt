@@ -29,21 +29,53 @@ const details = ref({})
       paragraphs.value = details.value.description.split("\n\n");
     }
   }
-  getInstitutionData();
+  const getListItems = async () => {
+    try {
+      const { data, error } = await useAsyncData('lists', async () => {
+        const { data, error } = await useAPIFetch("institutes/institutions/public/" + name.value + "/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (error) throw error;
+        return data;
+      });
+
+      if (error) {
+        console.log(error);
+      } else {
+        details.value = data.data;
+        console.log(details.value.name);
+        paragraphs.value = details.value.description.split("\n\n");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ssrListInstitute = async () => {
+  const { data, pending, error } = await useSsrfetch( "institutes/institutions/public/" + name.value + "/", {
+  });
+  if (!pending.value && !error.value) {
+    details.value = data.value.data;
+    paragraphs.value = details.value.description.split("\n\n");
+  }
+};
+ssrListInstitute();
 
 
-useSeoMeta({
-  title: () => 'Intstu | ' + details.value.name,
-  description: () => details.value.short_description,
-  image: () => details.value.image,
-  ogTitle: () => 'Intstu | ' + details.value.name,
-  ogDescription: () => details.value.short_description,
-  ogImage: () => details.value.image,
-  twitterTitle: () => 'Intstu | ' + details.value.name,
-  twitterDescription: () => details.value.short_description,
-  twitterImage: () => details.value.image,
+useServerSeoMeta({
+title: () => 'Intstu | ' + details.value.name,
+description: () => details.value.short_description,
+image: () => details.value.image,
+ogTitle: () => 'Intstu | ' + details.value.name,
+ogDescription: () => details.value.short_description,
+ogImage: () => details.value.image,
+twitterTitle: () => 'Intstu | ' + details.value.name,
+twitterDescription: () => details.value.short_description,
+twitterImage: () => details.value.image,
 })
-
 
 
 

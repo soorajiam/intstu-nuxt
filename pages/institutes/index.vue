@@ -1,194 +1,8 @@
-<script setup>
-import { ref, watch } from "vue";
-import debounce from 'lodash.debounce'
 
-const search = ref("");
-const items = ref("");
-const next = ref("");
-const previous = ref("");
-const offset = computed(() => page.value * 10);
-const paginationLength = ref(1);
-const page = ref(1);
-let url = ref("");
-
-const showLoginModal = ref(false);
-
-const countries = ref("");
-const selectedCountry = ref("");
-selectedCountry.value = "all";
-
-useSeoMeta({
-  title: 'Intstu - Institute List',
-  ogTitle: 'Intstu - Institute List',
-  description: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
-  ogDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
-  ogImage: '/images/logo/intstu_logo.png',
-  twitterCard: 'summary_large_image',
-  twitterTitle: 'Intstu - Institute List',
-  twitterDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
-  twitterImage: '/images/logo/intstu_logo.png',
-
-})
-
-const route = useRoute();
-if (route.query.page) {
-  page.value = parseInt(route.query.page);
-
-}
-
-  const response = useCustomFetch('country/dropdown/', {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-        countries.value = response.data.countries;
-    })
-    .catch((error) => {
-      //console.log("Error");
-    });
-
-const resultCount = ref(0);
-const getInstituteList = () => {
-  //Function to handle registration
-  items.value = [];
-   url =
-    "institutes/institutions/?limit=10&" +
-    "&offset=" +
-    offset.value +
-    "&limit=" +
-    "10" +
-    "&search=" +
-    search.value +
-    "&country=" +
-    selectedCountry.value;
-  const response = useCustomFetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      items.value = response.data.results;
-      console.log(response);
-      //console.log(items);
-      next.value = response.data.next;
-      previous.value = response.data.previous;
-      resultCount.value = response.data.count;
-      paginationLength.value = Math.ceil(resultCount.value / 10) - 1;
-    })
-    .catch((error) => {
-      //console.log("Error");
-    });
-
-};
-
-
-const ListInstitutes = async () => {
-  const { data, pending, error } = await  useAPIFetch('institutes/institutions/', {
-    query: {
-      limit: '12',
-      offset: offset.value,
-      search: search.value,
-      country: selectedCountry.value,
-    },
-  })
-
-  console.log(data);
-
-// To process the data after it's fetched
-if (!pending.value && !error.value) {
-  items.value = data.value.data.results;
-  //console.log("---DATA---")
-  //console.log(data);
-  // Uncomment and adapt if needed
-  // items.value.forEach(item => {
-  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
-  // });
-  next.value = data.value.next;
-  previous.value = data.value.previous;
-  resultCount.value = data.value.data.count;
-  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
-}
-
-}
-
-ListInstitutes();
-
-const nextPage = () => {
-  if (next.value) {
-    offset.value = offset.value + 10;
-    page.value = page.value + 1;
-    // getInstituteList();
-  }
-};
-
-const previousPage = () => {
-  if (previous.value) {
-    offset.value = offset.value - 10;
-    page.value = page.value - 1;
-    // getInstituteList();
-  }
-};
-
-watch(page, async (newPage, oldPage) => {
-  if (newPage !== oldPage) {
-    try {
-      offset.value = newPage * 10; // Reset offset when search changes
-      getInstituteList();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-});
-
-// watch(search, async (newSearch, oldSearch) => {
-//   if (newSearch !== oldSearch) {
-//     try {
-//       offset.value = 0; // Reset offset when search changes
-//       page.value = 1; // Reset page when search changes
-//       getInstituteList();
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-// });
-
-watch(search, debounce(() => {
-  try {
-    offset.value = 0; // Reset offset when search changes
-    page.value = 1; // Reset page when search changes
-    getInstituteList();
-  } catch (error) {
-    console.error(error);
-  }
-}, 500))
-
-watch(selectedCountry, async (newCountry, oldCountry) => {
-  if (newCountry !== oldCountry) {
-    try {
-      offset.value = 0; // Reset offset when search changes
-      page.value = 1; // Reset page when search changes
-      getInstituteList();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-});
-
-const openLoginModal = () => {
-  // Open login modal
-
-  showLoginModal.value = !showLoginModal.value;
-  
-  // document.getElementById("info-popup").classList.add("block");
-  // document.getElementById("info-popup").classList.remove("hidden");
-};
-
-</script>
 
 <template>
+
+  <p>{{ data }}</p>
 
 <div v-if="showLoginModal" id="info-popup" tabindex="-1" class="  overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
   <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
@@ -292,3 +106,213 @@ const openLoginModal = () => {
 
  
 </template>
+
+<script setup>
+import { ref, watch } from "vue";
+import debounce from 'lodash.debounce'
+
+const search = ref("");
+const items = ref("");
+const next = ref("");
+const previous = ref("");
+const offset = computed(() => page.value * 10);
+const paginationLength = ref(1);
+const page = ref(1);
+let url = ref("");
+
+const showLoginModal = ref(false);
+
+const countries = ref("");
+const selectedCountry = ref("");
+selectedCountry.value = "all";
+
+useSeoMeta({
+  title: 'Intstu - Institute List',
+  ogTitle: 'Intstu - Institute List',
+  description: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  ogDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  ogImage: '/images/logo/intstu_logo.png',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Intstu - Institute List',
+  twitterDescription: 'Fins the best institutes to study. Compare, make a list and apply to the best institutes.',
+  twitterImage: '/images/logo/intstu_logo.png',
+
+})
+
+const route = useRoute();
+if (route.query.page) {
+  page.value = parseInt(route.query.page);
+
+}
+
+  const response = useCustomFetch('country/dropdown/', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+        countries.value = response.data.countries;
+    })
+    .catch((error) => {
+      //console.log("Error");
+    });
+
+const resultCount = ref(0);
+const getInstituteList = () => {
+  //Function to handle registration
+  items.value = [];
+   url =
+    "institutes/institutions/?limit=10&" +
+    "&offset=" +
+    offset.value +
+    "&limit=" +
+    "10" +
+    "&search=" +
+    search.value +
+    "&country=" +
+    selectedCountry.value;
+  const response = useCustomFetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      items.value = response.data.results;
+      console.log(response);
+      //console.log(items);
+      next.value = response.data.next;
+      previous.value = response.data.previous;
+      resultCount.value = response.data.count;
+      paginationLength.value = Math.ceil(resultCount.value / 10) - 1;
+    })
+    .catch((error) => {
+      //console.log("Error");
+    });
+
+};
+
+
+const ListInstitutes = async () => {
+  const { data, pending, error } = await  useAPIFetch('institutes/institutions/', {
+    query: {
+      limit: '12',
+      offset: offset.value,
+      search: search.value,
+      country: selectedCountry.value,
+    },
+  })
+
+
+  console.log(data);
+
+// To process the data after it's fetched
+if (!pending.value && !error.value) {
+  items.value = data.value.data.results;
+  //console.log("---DATA---")
+  //console.log(data);
+  // Uncomment and adapt if needed
+  // items.value.forEach(item => {
+  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
+  // });
+  next.value = data.value.next;
+  previous.value = data.value.previous;
+  resultCount.value = data.value.data.count;
+  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+}
+
+}
+// ListInstitutes();
+
+const ssrListInstitutes = async () => {
+  const { data, pending, error } = await useSsrfetch( 'institutes/institutions/', {
+    offset: offset.value,
+    search: search.value,
+    country: selectedCountry.value,
+  });
+  if (!pending.value && !error.value) {
+    items.value = data.value.data.results;
+    next.value = data.value.next;
+    previous.value = data.value.previous;
+    resultCount.value = data.value.count;
+    paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+  }
+};
+ssrListInstitutes();
+
+
+// items.value = data.value.data.results;
+
+const nextPage = () => {
+  if (next.value) {
+    offset.value = offset.value + 10;
+    page.value = page.value + 1;
+    // getInstituteList();
+  }
+};
+
+const previousPage = () => {
+  if (previous.value) {
+    offset.value = offset.value - 10;
+    page.value = page.value - 1;
+    // getInstituteList();
+  }
+};
+
+watch(page, async (newPage, oldPage) => {
+  if (newPage !== oldPage) {
+    try {
+      offset.value = newPage * 10; // Reset offset when search changes
+      getInstituteList();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+// watch(search, async (newSearch, oldSearch) => {
+//   if (newSearch !== oldSearch) {
+//     try {
+//       offset.value = 0; // Reset offset when search changes
+//       page.value = 1; // Reset page when search changes
+//       getInstituteList();
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+// });
+
+watch(search, debounce(() => {
+  try {
+    offset.value = 0; // Reset offset when search changes
+    page.value = 1; // Reset page when search changes
+    // getInstituteList();
+    ssrListInstitutes();
+  } catch (error) {
+    console.error(error);
+  }
+}, 500))
+
+watch(selectedCountry, async (newCountry, oldCountry) => {
+  if (newCountry !== oldCountry) {
+    try {
+      offset.value = 0; // Reset offset when search changes
+      page.value = 1; // Reset page when search changes
+      getInstituteList();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+const openLoginModal = () => {
+  // Open login modal
+
+  showLoginModal.value = !showLoginModal.value;
+  
+  // document.getElementById("info-popup").classList.add("block");
+  // document.getElementById("info-popup").classList.remove("hidden");
+};
+
+</script>

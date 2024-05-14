@@ -1,6 +1,14 @@
 <script setup>
 import debounce from 'lodash.debounce'
 
+prerenderRoutes(
+  [
+    "/blog/canada-doubling-financial-threshold-for-international-students-in-2024-to-20635",
+    "/blog/how-to-select-course-in-a-university",
+    "/blog/when-can-i-apply-for-psw-visa-in-uk"
+]
+)
+
 const items = ref([]);
 
 const countries = ref("");
