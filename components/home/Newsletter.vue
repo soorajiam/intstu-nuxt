@@ -33,7 +33,7 @@
                             <button type="submit"
                            
                                 @click.prevent="subscribe"
-                                class="py-3 px-5 w-full text-sm text-gray-900 dark:text-gray-200 font-medium text-center rounded-lg border cursor-pointer bg-blue-800 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4   dark:focus:ring-primary-800">Subscribe</button>
+                                class="py-3 px-5 w-full text-sm text-gray-200 dark:text-gray-200 font-medium text-center rounded-lg border cursor-pointer bg-blue-800 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4   dark:focus:ring-primary-800">Subscribe</button>
                         </div>
                     </div>
                     <NuxtTurnstile v-if="error=='' && email.length>3" class="py-3 px-7 mb-6 ml-8" v-model="token" />

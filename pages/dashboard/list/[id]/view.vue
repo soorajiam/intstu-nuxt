@@ -22,6 +22,8 @@ const showCreateModal = ref(false)
 
 const tableTab = ref('institutes')
 
+const lists = ref("")
+
 const published = ref({
     institutes : true,
     courses: false,
@@ -70,7 +72,7 @@ const { data: details } = await useAsyncData('details', async () => {
 console.log('details:', details)
 
 
-
+const getListItems = async () => {
 const { data: lists } = await useAsyncData('lists', async () => {
     try {
         const data = await client
@@ -93,6 +95,14 @@ const { data: lists } = await useAsyncData('lists', async () => {
     lazy: true,
 
 });
+return lists.value;
+
+   
+}
+
+lists.value = await getListItems();
+
+console.log('lists:', lists)
 
 
 
