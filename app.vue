@@ -39,21 +39,6 @@ if (process.client) {
 
 import { onMounted, watchEffect } from 'vue'
 
-const theme = ref('light')
-
-if (process.client) {
-  onMounted(() => {
-  document.documentElement.classList.add(localStorage.theme || "dark");
-  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-  //isDark.value = document.documentElement.classList.contains("dark");
-})
-
-watchEffect(() => {
-  document.documentElement.classList.add(localStorage.theme || "dark");
-  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-  //isDark.value = document.documentElement.classList.contains("dark");
-})
-}
 
 
 

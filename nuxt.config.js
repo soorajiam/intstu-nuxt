@@ -24,7 +24,6 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
     '@unlok-co/nuxt-stripe',
     '@pinia/nuxt',
     '@nuxtjs/sitemap',
@@ -33,8 +32,13 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
-    'nuxt-tiptap-editor'
+    'nuxt-tiptap-editor',
+    '@nuxt/ui'
   ],
+
+  colorMode: {
+    preference: 'dark'
+  },
 
   i18n: {
     lazy: false,
@@ -91,11 +95,10 @@ export default defineNuxtConfig({
     },
   },
 
-  
-
   site: {
     // url: 'http://intstu.com',
   },
+
   sitemap: {
     sources: [
       '/api/sitemap/blogs',
@@ -117,9 +120,6 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  
-
-
   turnstile: {
     siteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
     secretKey: import.meta.env.VITE_TURNSTILE_SECRET_KEY,
@@ -130,7 +130,7 @@ export default defineNuxtConfig({
   //   url: import.meta.env.VITE_SUPABASE_URL,
   //   key: import.meta.env.VITE_SUPABASE_KEY,
   // },
-  
+
 
   stripe: {
     // Server
@@ -154,7 +154,7 @@ export default defineNuxtConfig({
   gtag: {
     id: import.meta.env.VITE_GA_ID,
   },
-  
+
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -162,6 +162,5 @@ export default defineNuxtConfig({
     },
   },
 
-
-  
+  compatibilityDate: '2024-08-02',
 })

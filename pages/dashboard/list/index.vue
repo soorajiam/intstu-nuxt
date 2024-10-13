@@ -4,7 +4,7 @@ import { PlusIcon } from '@heroicons/vue/20/solid'
 import { list } from 'postcss';
 
 definePageMeta({
-  middleware: 'auth',
+  middleware: 'user-auth',
   layout: 'dashboard',
 })
 const localePath = useLocalePath()
