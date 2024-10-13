@@ -11,7 +11,7 @@
     "start": "node .output/server/index.mjs"
   },
   "engines": {
-    "node": "18.16.1"
+    "node": "20.16.0"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.19",
