@@ -9,4 +9,4 @@ export default defineNuxtRouteMiddleware((to, _from) => {
   if (!user.value) {
     return navigateTo('/auth/login')
   }
-})a
+})
