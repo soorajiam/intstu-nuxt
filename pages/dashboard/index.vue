@@ -3,11 +3,15 @@
 
 
 <h1>Dashboard</h1>
+<p>{{ user }}</p>
 </template>
 
 <script setup>
+
+const user =  useSupabaseUser()
+console.log('user', user.value)
 definePageMeta({
-  middleware: 'auth',
+  // middleware: 'user-auth',
   layout: 'dashboard',
 })
 </script>

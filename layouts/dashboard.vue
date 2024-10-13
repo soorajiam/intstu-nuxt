@@ -1,8 +1,8 @@
 <template>
   <div>
-    <DashboardNavBar />
+    <NavsDashboardNav />
 
-    <div class="min-h-screen">
+    <div class="min-h-screen ">
       <slot />
 
         </div>
@@ -16,5 +16,6 @@
 </script>
 
 <style>
+
 
 </style>

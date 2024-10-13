@@ -5,7 +5,7 @@
 <script setup>
 import { useUserStore } from '~/store/userStore';
 
-const localePath = useLocalePath();
+// const localePath = useLocalePath();
 const userStore = useUserStore();
 const client = useSupabaseClient();
 
@@ -14,6 +14,6 @@ const { error } = await client.auth.signOut()
 if (process.client) {
   userStore.logout();
 
-  navigateTo(localePath('/'));
+  navigateTo('/');
 }
 </script>

@@ -4,7 +4,7 @@
       <div class="max-w-sm mx-auto">
         <div class="mb-6 text-center">
           <a class="inline-block mb-6" href="#">
-            <img class="h-16" src="/images/logo/intstu_logo.png" alt="">
+            <img class="h-16" src="" alt="">
           </a>
           <h3 class="mb-4 text-2xl md:text-3xl font-bold">Sign up for your free account</h3>
           <p class="text-lg text-coolGray-500 font-medium">Well begun.. is half done</p>
@@ -100,7 +100,7 @@ const handleSupaBaseSignup = async () => {
     console.log('Session:', data.session)
     userStore.login(data.user.id, data.session.access_token);
     // handleSignup();
-    navigateTo(localePath('/dashboard'));
+    navigateTo('/dashboard');
   }
 };
 
