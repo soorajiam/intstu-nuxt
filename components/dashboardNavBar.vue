@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center">
 
           <div class="flex flex-shrink-0 justify-start items-center">
-              <a :href="localePath('/')" class="flex mr-6">
+              <a :href="/" class="flex mr-6">
                 <img src="/images/logo/intstu_logo.png" class="mr-3 h-8" alt="Intstu Logo" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Intstu</span>
               </a>
@@ -277,7 +277,7 @@ const showNotifications = ref(false);
 const showUserMenu = ref(false);
 const showToolsMenu = ref(false);
 
-const localePath = useLocalePath();
+// const localePath = useLocalePath();
 
 const route = useRoute();
 
@@ -290,7 +290,7 @@ const featuresAvailable = [
     icon: Squares2X2Icon,
     color: "bg-yellow-500",
     published : true,
-    link: localePath('/dashboard/')
+    link: "/dashboard/"
   },
   {
     title: "List",
@@ -298,7 +298,7 @@ const featuresAvailable = [
     icon: QueueListIcon,
     color: "bg-yellow-500",
     published : true,
-    link: localePath('/dashboard/list/')
+    link: "/dashboard/list/"
   },
   {
     title: "Your details",
@@ -306,7 +306,7 @@ const featuresAvailable = [
     icon: FingerPrintIcon,
     color: "bg-yellow-500",
     published : false,
-    link: localePath('/dashboard/user-details/')
+    link: "/dashboard/user-details/"
   },
   {
     title: "Resume",

@@ -1,6 +1,6 @@
 <script setup>
 
-localePath = useLocalePath()
+// localePath = useLocalePath()
 
 defineProps({
     error: {

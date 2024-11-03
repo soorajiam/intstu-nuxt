@@ -22,6 +22,7 @@
     "@nuxtjs/supabase": "^1.2.2",
     "@nuxtjs/turnstile": "^0.8.0",
     "@pinia/nuxt": "^0.5.3",
+    "@primevue/themes": "^4.2.1",
     "@stefanobartoletti/nuxt-social-share": "^0.6.1",
     "axios": "^1.6.8",
     "execa": "^9.3.0",
@@ -31,6 +32,8 @@
     "nuxt": "^3.10.3",
     "nuxt-tiptap-editor": "^1.1.2",
     "pinia": "^2.2.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.1",
     "vue": "^3.4.21",
     "vue-country-flag-next": "^2.3.2",
     "vue-router": "^4.3.0"
@@ -38,6 +41,7 @@
   "devDependencies": {
     "@nuxtjs/i18n": "^8.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
+    "@primevue/nuxt-module": "^4.2.1",
     "@tailwindcss/typography": "^0.5.10",
     "@unlok-co/nuxt-stripe": "^2.0.0",
     "autoprefixer": "^10.4.18",

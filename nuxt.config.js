@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import Aura from '@primevue/themes/aura';
 
 
 export default defineNuxtConfig({
@@ -33,11 +33,30 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
     'nuxt-tiptap-editor',
-    '@nuxt/ui'
+    // 'tailwindcss/nesting',
+    // '@nuxt/ui',
+    '@primevue/nuxt-module'
   ],
 
-  colorMode: {
-    preference: 'dark'
+  primevue: {
+    usePrimeVue: true,
+    components: {
+      include: ['Button', 'InputText', 'Dialog', 'Dropdown'] // Added Dropdown
+    },
+    options: {
+      ripple: true,
+      autoImport: true,
+      inputVariant: 'filled',
+      theme: {
+          preset: Aura,
+          options: {
+              prefix: 'p',
+              darkModeSelector: 'system',
+              cssLayer: false
+          }
+      }
+    },
+    cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
   },
 
   i18n: {
@@ -57,13 +76,7 @@ export default defineNuxtConfig({
         iso: 'en-US',
         name: 'English',
         file: 'en-US.json',
-      },
-      {
-        code: 'ml',
-        iso: 'ml-IN',
-        name: 'Malayalam',
-        file: 'ml-IN.json',
-      },
+      }
     ],
 
 
@@ -88,12 +101,7 @@ export default defineNuxtConfig({
   //   },
   // },
 
-  tiptap: {
-    prefix: "Tiptap", //prefix for Tiptap imports, composables not included
-    lowlight: {
-      theme: "github-dark",
-    },
-  },
+
 
   site: {
     // url: 'http://intstu.com',
@@ -118,7 +126,11 @@ export default defineNuxtConfig({
     // other head elements
   },
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+
+    'primeicons/primeicons.css'
+  ],
 
   turnstile: {
     siteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY,

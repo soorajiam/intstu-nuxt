@@ -1,32 +1,34 @@
-
-
 <template>
 
   <p>{{ data }}</p>
 
+
+
 <div v-if="showLoginModal" id="info-popup" tabindex="-1" class="  overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
   <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
-    <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 p-8">
+    <div class="relative bg-gray-800 rounded-lg shadow dark:bg-gray-800 p-8">
       <div class="text-sm font-light text-gray-500 dark:text-gray-400">
         <h3 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">Login to prioritize</h3>
         <p>
           Creating an account lets you build a personalized shortlist of universities, making it easier to compare programs, track application deadlines, and access tailored advice to guide your academic journey. Sign up now to streamline your university search!
         </p>
+
       </div>
       <div class="flex justify-between items-center pt-0 space-y-4 sm:space-y-0">
         <a href="/auth/login/" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create List?</a>
         <div class="flex items-center space-x-4">
           <button @click="openLoginModal" id="close-modal" type="button" class="py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-          <a :href="localePath('/auth/signup/')" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
+          <a :href="NuxtLink('/auth/signup/')" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-   
+
     <div class="conatiner mx-auto p-4 dark:bg-gray-900">
     <div class="relative w-full  h-64">
+      <Button icon="pi pi-question" severity="help" label="Help" />
       <h1 class=" pt-12 text-center text-black dark:text-gray-100 text-3xl">
         {{$t('institute_list.title')}}
       </h1>
@@ -34,6 +36,7 @@
       <div class="absolute inset-x-0 bottom-0 h-32  p-4 md:w-2/3 md:mx-auto">
         <form>
           <div class="flex mx-auto md:w-2/3 md:mx-auto">
+            
             <div class="  w-64 relative inline-flex text-left">
               <select id="dropdown-search-city" v-model="selectedCountry"
                 class="w-full py-2.5 px-4 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
@@ -77,17 +80,17 @@
       <div class="flex flex-col items-center mt-8">
       <!-- Help text -->
       <span class="text-sm text-gray-700 dark:text-gray-400">
-        Showing <span class="font-semibold text-gray-900 dark:text-white">{{ offset - 9 }}</span> to <span
-          class="font-semibold text-gray-900 dark:text-white">{{ offset>resultCount? resultCount: offset  }}</span> of <span
+        Showing <span class="font-semibold text-gray-900 dark:text-white">{{ (page - 1) * 10 + 1 }}</span> to <span
+          class="font-semibold text-gray-900 dark:text-white">{{ Math.min(page * 10, resultCount) }}</span> of <span
           class="font-semibold text-gray-900 dark:text-white">{{ resultCount }}</span> Entries
       </span>
       <!-- Buttons -->
       <div class="inline-flex mt-2 xs:mt-0">
-        <a :href="page > 1 ? localePath({ query: { page: page - 1 } }) : ''"
+        <a :href="page > 1 ? NuxtLink({ query: { page: page - 1 } }) : ''"
           class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 rounded-l hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           Prev
         </a>
-        <a :href="page <= (resultCount/10) ? localePath({ query: { page: page + 1 } }) : ''"
+        <a :href="page < Math.ceil(resultCount/10) ? NuxtLink({ query: { page: page + 1 } }) : ''"
           class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 border-0 border-l border-gray-700 rounded-r hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           Next
         </a>
@@ -108,16 +111,19 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import debounce from 'lodash.debounce'
+
+import Dropdown from 'primevue/dropdown';
+import InputText from 'primevue/inputtext';
 
 const search = ref("");
 const items = ref("");
 const next = ref("");
 const previous = ref("");
-const offset = computed(() => page.value * 10);
-const paginationLength = ref(1);
 const page = ref(1);
+const offset = computed(() => (page.value - 1) * 10);
+const paginationLength = ref(1);
 let url = ref("");
 
 const showLoginModal = ref(false);
@@ -142,7 +148,6 @@ useSeoMeta({
 const route = useRoute();
 if (route.query.page) {
   page.value = parseInt(route.query.page);
-
 }
 
   const response = useCustomFetch('country/dropdown/', {
@@ -163,11 +168,9 @@ const getInstituteList = () => {
   //Function to handle registration
   items.value = [];
    url =
-    "institutes/institutions/?limit=10&" +
+    "institutes/institutions/?limit=10" +
     "&offset=" +
     offset.value +
-    "&limit=" +
-    "10" +
     "&search=" +
     search.value +
     "&country=" +
@@ -180,12 +183,10 @@ const getInstituteList = () => {
   })
     .then((response) => {
       items.value = response.data.results;
-      console.log(response);
-      //console.log(items);
       next.value = response.data.next;
       previous.value = response.data.previous;
       resultCount.value = response.data.count;
-      paginationLength.value = Math.ceil(resultCount.value / 10) - 1;
+      paginationLength.value = Math.ceil(resultCount.value / 10);
     })
     .catch((error) => {
       //console.log("Error");
@@ -197,36 +198,24 @@ const getInstituteList = () => {
 const ListInstitutes = async () => {
   const { data, pending, error } = await  useAPIFetch('institutes/institutions/', {
     query: {
-      limit: '12',
+      limit: '10',
       offset: offset.value,
       search: search.value,
       country: selectedCountry.value,
     },
   })
 
-
-  console.log(data);
-
-// To process the data after it's fetched
-if (!pending.value && !error.value) {
-  items.value = data.value.data.results;
-  //console.log("---DATA---")
-  //console.log(data);
-  // Uncomment and adapt if needed
-  // items.value.forEach(item => {
-  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
-  // });
-  next.value = data.value.next;
-  previous.value = data.value.previous;
-  resultCount.value = data.value.data.count;
-  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+  if (!pending.value && !error.value) {
+    items.value = data.value.data.results;
+    next.value = data.value.next;
+    previous.value = data.value.previous;
+    resultCount.value = data.value.data.count;
+    paginationLength.value = Math.ceil(resultCount.value / 10);
+  }
 }
-
-}
-// ListInstitutes();
 
 const ssrListInstitutes = async () => {
-  const { data, pending, error } = await useSsrfetch( 'institutes/institutions/', {
+  const { data, pending, error } = await useSsrfetch('institutes/institutions/', {
     offset: offset.value,
     search: search.value,
     country: selectedCountry.value,
@@ -236,58 +225,24 @@ const ssrListInstitutes = async () => {
     next.value = data.value.next;
     previous.value = data.value.previous;
     resultCount.value = data.value.count;
-    paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+    paginationLength.value = Math.ceil(resultCount.value / 10);
   }
 };
 ssrListInstitutes();
 
-
-// items.value = data.value.data.results;
-
-const nextPage = () => {
-  if (next.value) {
-    offset.value = offset.value + 10;
-    page.value = page.value + 1;
-    // getInstituteList();
-  }
-};
-
-const previousPage = () => {
-  if (previous.value) {
-    offset.value = offset.value - 10;
-    page.value = page.value - 1;
-    // getInstituteList();
-  }
-};
-
 watch(page, async (newPage, oldPage) => {
   if (newPage !== oldPage) {
     try {
-      offset.value = newPage * 10; // Reset offset when search changes
-      getInstituteList();
+      ssrListInstitutes();
     } catch (error) {
       console.error(error);
     }
   }
 });
 
-// watch(search, async (newSearch, oldSearch) => {
-//   if (newSearch !== oldSearch) {
-//     try {
-//       offset.value = 0; // Reset offset when search changes
-//       page.value = 1; // Reset page when search changes
-//       getInstituteList();
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-// });
-
 watch(search, debounce(() => {
   try {
-    offset.value = 0; // Reset offset when search changes
-    page.value = 1; // Reset page when search changes
-    // getInstituteList();
+    page.value = 1;
     ssrListInstitutes();
   } catch (error) {
     console.error(error);
@@ -297,9 +252,8 @@ watch(search, debounce(() => {
 watch(selectedCountry, async (newCountry, oldCountry) => {
   if (newCountry !== oldCountry) {
     try {
-      offset.value = 0; // Reset offset when search changes
-      page.value = 1; // Reset page when search changes
-      getInstituteList();
+      page.value = 1;
+      ssrListInstitutes();
     } catch (error) {
       console.error(error);
     }
@@ -307,12 +261,20 @@ watch(selectedCountry, async (newCountry, oldCountry) => {
 });
 
 const openLoginModal = () => {
-  // Open login modal
-
   showLoginModal.value = !showLoginModal.value;
-  
-  // document.getElementById("info-popup").classList.add("block");
-  // document.getElementById("info-popup").classList.remove("hidden");
 };
 
 </script>
+
+<style>
+/* Add PrimeVue component customizations if needed */
+.p-dropdown {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.p-inputtext {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+</style>
