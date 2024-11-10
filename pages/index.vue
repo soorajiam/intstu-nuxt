@@ -6,8 +6,9 @@
     <div>
 
         <HomeHero />
-        
-        <homeBlogList />
+        <HomeIntstitutesBanner />
+        <HomeBlogList />
+
 
 
         

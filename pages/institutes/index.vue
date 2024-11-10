@@ -1,113 +1,136 @@
 <template>
+  <div class="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 mb-6">
+            Find Your Perfect University
+          </h1>
+          <p class="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300 mb-10">
+            Compare top universities worldwide, create your personalized shortlist, and take the first step towards your dream education.
+          </p>
 
-  <p>{{ data }}</p>
+          <!-- Search Section -->
+          <div class="max-w-3xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-4">
+              <div class="md:w-1/3">
+                <select v-model="selectedCountry" 
+                  class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-700 dark:text-gray-200">
+                  <option value="all">All Countries</option>
+                  <option v-for="country in countries" :key="country[0]" :value="country[0]">
+                    {{ country[1] }}
+                  </option>
+                </select>
+              </div>
+              
+              <div class="md:w-2/3 relative">
+                <input type="search" v-model="search"
+                  class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-700 dark:text-gray-200"
+                  :placeholder="$t('institute_list.search')">
+                <button class="absolute right-3 top-1/2 -translate-y-1/2">
+                  <i class="pi pi-search text-gray-400 dark:text-gray-300"></i>
+                </button>
+              </div>
+            </div>
 
-
-
-<div v-if="showLoginModal" id="info-popup" tabindex="-1" class="  overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-  <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
-    <div class="relative bg-gray-800 rounded-lg shadow dark:bg-gray-800 p-8">
-      <div class="text-sm font-light text-gray-500 dark:text-gray-400">
-        <h3 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">Login to prioritize</h3>
-        <p>
-          Creating an account lets you build a personalized shortlist of universities, making it easier to compare programs, track application deadlines, and access tailored advice to guide your academic journey. Sign up now to streamline your university search!
-        </p>
-
+            <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+              {{ $t('institute_list.description') }}
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="flex justify-between items-center pt-0 space-y-4 sm:space-y-0">
-        <a href="/auth/login/" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create List?</a>
-        <div class="flex items-center space-x-4">
-          <button @click="openLoginModal" id="close-modal" type="button" class="py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-          <a :href="NuxtLink('/auth/signup/')" id="confirm-button" type="button" class="py-2 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Signup</a>
+
+      <!-- Decorative Elements -->
+      <div class="absolute top-0 right-0 -translate-y-12 translate-x-12 transform opacity-10 dark:opacity-5">
+        <div class="w-48 h-48 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
+      </div>
+      <div class="absolute bottom-0 left-0 translate-y-12 -translate-x-12 transform opacity-10 dark:opacity-5">
+        <div class="w-72 h-72 rounded-full bg-gradient-to-r from-indigo-400 to-blue-400"></div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid gap-6">
+        <div v-for="item in items" :key="item.id">
+          <InstituteListDetail :item="item" @open-login-modal="openLoginModal" />
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-12 flex flex-col items-center">
+        <span class="text-sm text-gray-600 dark:text-gray-400">
+          Showing <span class="font-semibold">{{ (page - 1) * 10 + 1 }}</span> to <span class="font-semibold">{{ Math.min(page * 10, resultCount) }}</span> of <span class="font-semibold">{{ resultCount }}</span> Universities
+        </span>
+        
+        <div class="mt-4 flex space-x-2">
+          <a :href="page > 1 ? NuxtLink({ query: { page: page - 1 } }) : ''"
+            class="px-6 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200">
+            Previous
+          </a>
+          <a :href="page < Math.ceil(resultCount/10) ? NuxtLink({ query: { page: page + 1 } }) : ''"
+            class="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200">
+            Next
+          </a>
+        </div>
+
+        <!-- Search Tip -->
+        <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-8 text-center transform hover:scale-[1.02] transition-all duration-300">
+          <div class="max-w-2xl mx-auto">
+            <h3 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+              Expand Your Academic Horizons
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              Not seeing your dream institution? Our comprehensive database includes universities worldwide. Try refining your search above to discover more opportunities.
+            </p>
+            <button @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+              class="group inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg transition-all duration-300 space-x-2">
+              <i class="pi pi-search text-blue-600 dark:text-blue-400 group-hover:rotate-12 transition-transform duration-300"></i>
+              <span class="text-blue-600 dark:text-blue-400 font-medium">Explore More Universities</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-
-    <div class="conatiner mx-auto p-4 dark:bg-gray-900">
-    <div class="relative w-full  h-64">
-      <Button icon="pi pi-question" severity="help" label="Help" />
-      <h1 class=" pt-12 text-center text-black dark:text-gray-100 text-3xl">
-        {{$t('institute_list.title')}}
-      </h1>
-
-      <div class="absolute inset-x-0 bottom-0 h-32  p-4 md:w-2/3 md:mx-auto">
-        <form>
-          <div class="flex mx-auto md:w-2/3 md:mx-auto">
-            
-            <div class="  w-64 relative inline-flex text-left">
-              <select id="dropdown-search-city" v-model="selectedCountry"
-                class="w-full py-2.5 px-4 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                <option value="all">All</option>
-                <option v-for="country in countries" :key="country[0]" :value="country[0]">
-                  {{ country[1] }}
-                </option>
-
-                <!-- Add more options with icons here -->
-              </select>
-
-            </div>
-            <div class="relative w-full">
-              <input type="search" id="location-search" v-model="search"
-                class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                :placeholder="$t('institute_list.search')" required>
-              <button type="submit"
-                class="absolute top-0 right-0 h-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-                <span class="sr-only">Search</span>
-              </button>
-            </div>
-          </div>
-        </form>
-        <p class="p-2 text-center text-gray-900 dark:text-gray-100"> {{$t('institute_list.description')}}</p>
-      </div>
-    </div>
-    <div class="flex flex-col md:grid md:grid-cols-1 gap-4 mt-6 md:w-full container mx-auto xl:w-4/5">
-
-
-
-      <div v-for="item in items" :key="item.id">
-        <InstituteListDetail :item="item" @open-login-modal="openLoginModal" />
-      </div>
-
-
-      <div class="flex flex-col items-center mt-8">
-      <!-- Help text -->
-      <span class="text-sm text-gray-700 dark:text-gray-400">
-        Showing <span class="font-semibold text-gray-900 dark:text-white">{{ (page - 1) * 10 + 1 }}</span> to <span
-          class="font-semibold text-gray-900 dark:text-white">{{ Math.min(page * 10, resultCount) }}</span> of <span
-          class="font-semibold text-gray-900 dark:text-white">{{ resultCount }}</span> Entries
-      </span>
-      <!-- Buttons -->
-      <div class="inline-flex mt-2 xs:mt-0">
-        <a :href="page > 1 ? NuxtLink({ query: { page: page - 1 } }) : ''"
-          class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 rounded-l hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          Prev
-        </a>
-        <a :href="page < Math.ceil(resultCount/10) ? NuxtLink({ query: { page: page + 1 } }) : ''"
-          class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 border-0 border-l border-gray-700 rounded-r hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          Next
-        </a>
-      </div>
-
+  <!-- Login Modal -->
+  <div v-if="showLoginModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-lg w-full p-8">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Join Our Academic Community</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+          Create your free account to unlock exclusive features:
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-center">
+              <i class="pi pi-check text-green-500 mr-2"></i>
+              Build your personalized university shortlist
+            </li>
+            <li class="flex items-center">
+              <i class="pi pi-check text-green-500 mr-2"></i>
+              Track application deadlines
+            </li>
+            <li class="flex items-center">
+              <i class="pi pi-check text-green-500 mr-2"></i>
+              Get tailored university recommendations
+            </li>
+          </ul>
+        </p>
+        
+        <div class="flex justify-end space-x-4">
+          <button @click="openLoginModal" class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+            Cancel
+          </button>
+          <a href="/auth/signup/" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg transition-all duration-200 transform hover:scale-105">
+            Sign Up Now
+          </a>
+        </div>
+      </div>
     </div>
-
-
-
-    </div>
-    
   </div>
-
- 
-
- 
 </template>
 
 <script setup>

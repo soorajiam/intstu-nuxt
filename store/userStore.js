@@ -1,69 +1,51 @@
 import { defineStore } from 'pinia'
 
-export const useUserStore = defineStore({
-    // unique id of the store across your application
-    id: 'user',
-
+export const useUserStore = defineStore('user', {
     state: () => ({
-        isLoggedIn: false,
-        user_id: null,
-        token: null,
-        server_token: null,
-        server_user_id: null,
+        isLoggedIn: process.client ? !!localStorage.getItem('user_id') : false,
+        user_id: process.client ? localStorage.getItem('user_id') || null : null,
+        token: process.client ? localStorage.getItem('token') || null : null,
+        first_name: process.client ? localStorage.getItem('first_name') || null : null,
+        last_name: process.client ? localStorage.getItem('last_name') || null : null
     }),
 
     getters: {
-        isLogged: (state) => {
-            return state.isLoggedIn
-        },
-        getUser: (state) => {
-            return state.user_id
-        },
-        getToken: (state) => {
-            return state.token
-        },
-        getServerToken: (state) => {
-            return state.server_token
-        },
-        getServerUser: (state) => {
-            return state.server_user_id
-        }
+        isLogged: (state) => state.isLoggedIn,
+        getUser: (state) => state.user_id,
+        getToken: (state) => state.token,
+        getFirstName: (state) => state.first_name,
+        getLastName: (state) => state.last_name
     },
 
     actions: {
-        login(user_id, token) {
+        login(userId, userToken, firstName, lastName) {
             this.isLoggedIn = true
-            this.user_id = user_id
-            this.token = token
+            this.user_id = userId
+            this.token = userToken
+            this.first_name = firstName
+            this.last_name = lastName
 
-            //console.log('user_id', user_id)
-
-            localStorage.setItem('user_id', user_id)
-            localStorage.setItem('token', token)
-        },
-
-        server_login(user_id, token) {
-            this.isLoggedIn = true
-            this.server_user_id = user_id
-            this.server_token = token
-
-            localStorage.setItem('server_user_id', user_id)
-            localStorage.setItem('server_token', token)
+            if (process.client) {
+                localStorage.setItem('user_id', userId)
+                localStorage.setItem('token', userToken)
+                localStorage.setItem('first_name', firstName)
+                localStorage.setItem('last_name', lastName)
+            }
         },
 
         logout() {
             this.isLoggedIn = false
             this.user_id = null
             this.token = null
-            this.server_user_id = null
-            this.server_token = null
+            this.first_name = null
+            this.last_name = null
 
-            localStorage.removeItem('user_id')
-            localStorage.removeItem('token')
-            localStorage.removeItem('server_user_id')
-            localStorage.removeItem('server_token')
-
-
+            if (process.client) {
+                localStorage.removeItem('user_id')
+                localStorage.removeItem('token')
+                localStorage.removeItem('first_name')
+                localStorage.removeItem('last_name')
+            }
         }
     }
 })

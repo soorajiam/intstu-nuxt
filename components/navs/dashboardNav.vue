@@ -1,108 +1,139 @@
 <template>
-  <header class="bg-white border-b border-gray-200  w-full ">
-    <div class="px-1 sm:px-6 lg:px-8">
-      <div class="flex sm:justify-between items-center h-14">
-        <!-- Logo -->
-        <div class="flex-shrink-0 flex items-center">
-          <a :href="localePath('/')" class="flex items-center">
-            <img src="/images/logo/intstu_logo.png" class="h-8 w-auto" alt="Intstu Logo" />
-          </a>
-        </div>
+  <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 w-full">
+    <div class="flex items-center h-14 px-4 sm:px-6 lg:px-8">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center">
+          <img src="/images/logo/intstu_logo.png" class="h-8 w-auto" alt="Intstu Logo" />
+        </a>
+      </div>
 
-        <!-- Search Bar -->
-        <div class="flex-1 sm:max-w-xl mx-4 max-w-64">
-          <div class="">
-            <input type="search" placeholder="Search" class="w-full bg-gray-100 border border-gray-300 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-              </svg>
-            </div>
-          </div>
+      <!-- Mobile Menu Button -->
+      <div class="flex-grow flex items-center justify-end sm:hidden">
+        <Button icon="pi pi-bars" class="p-button-text" @click="toggleMobileMenu" />
+      </div>
+
+      <!-- Search Input and Navigation Icons -->
+      <div class="hidden sm:flex flex-grow mx-4 items-center">
+        <!-- Search Input -->
+        <div class="flex-grow">
+          <InputText placeholder="Search" v-model="searchQuery" :style="{ width: '100%' }" />
         </div>
 
         <!-- Navigation Icons -->
-        <nav class=" items-center space-x-6 hidden sm:flex">
-          <a href="#" class="text-gray-500 hover:text-gray-900">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd" />
-            </svg>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-gray-900">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-            </svg>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-gray-900">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </nav>
+        <div class="flex items-center space-x-4 ml-4">
+          <Button icon="pi pi-home" class="p-button-text" tooltip="Home" tooltipPosition="bottom" />
+          <Button icon="pi pi-users" class="p-button-text" tooltip="My Network" tooltipPosition="bottom" />
+          <Button icon="pi pi-briefcase" class="p-button-text" tooltip="Jobs" tooltipPosition="bottom" />
+          <Button icon="pi pi-comments" class="p-button-text" tooltip="Messaging" tooltipPosition="bottom" />
+          <Button icon="pi pi-bell" class="p-button-text" tooltip="Notifications" tooltipPosition="bottom" />
 
-        
+          <!-- User Menu -->
+          <SplitButton
+            label="Me"
+            :model="userMenuItems"
+            class="p-button-text"
+            :icon="userAvatar"
+            iconPos="right"
+          >
+          </SplitButton>
+
+          <!-- Theme Toggle -->
+          <Button
+            @click="toggleTheme"
+            :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+            class="p-button-rounded p-button-text"
+            :tooltip="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+            tooltipPosition="bottom"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div v-if="isMobileMenuOpen" class="sm:hidden">
+      <div class="px-4 pt-2 pb-3 space-y-1">
+        <InputText placeholder="Search" v-model="searchQuery" :style="{ width: '100%' }" class="mb-2" />
+
+        <Button icon="pi pi-home" label="Home" class="p-button-text w-full text-left" />
+        <Button icon="pi pi-users" label="My Network" class="p-button-text w-full text-left" />
+        <Button icon="pi pi-briefcase" label="Jobs" class="p-button-text w-full text-left" />
+        <Button icon="pi pi-comments" label="Messaging" class="p-button-text w-full text-left" />
+        <Button icon="pi pi-bell" label="Notifications" class="p-button-text w-full text-left" />
 
         <!-- User Menu -->
-        <div class="ml-4 flex items-center">
-          <div class="relative">
-            <button @click="showUserMenu = !showUserMenu" class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:shadow-outline" id="user-menu" aria-label="User menu" aria-haspopup="true">
-              <img class="h-8 w-8 rounded-full" src="https://Intstu.com/docs/images/people/profile-picture-5.jpg" alt="User avatar">
-            </button>
-            <div v-if="showUserMenu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
-              <div class="py-1 rounded-md bg-white shadow-xs">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
-              </div>
-            </div>
-          </div>
-          <ClientOnly>
-    <UButton
-      :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-      color="gray"
-      variant="ghost"
-      aria-label="Theme"
-      @click="isDark = !isDark"
-    />
-    <template #fallback>
-      <div class="w-8 h-8" />
-    </template>
-  </ClientOnly>
-        </div>
+        <SplitButton
+          label="Me"
+          :model="userMenuItems"
+          class="p-button-text w-full text-left"
+          :icon="userAvatar"
+          iconPos="right"
+        >
+        </SplitButton>
+
+        <!-- Theme Toggle -->
+        <Button
+          @click="toggleTheme"
+          :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+          class="p-button-rounded p-button-text w-full text-left"
+          :tooltip="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+          tooltipPosition="bottom"
+        />
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { SunIcon, MoonIcon, Squares2X2Icon, QueueListIcon, FingerPrintIcon, NewspaperIcon, RssIcon, ChatBubbleLeftRightIcon, RocketLaunchIcon, SparklesIcon, HandRaisedIcon } from '@heroicons/vue/24/solid'
+import { ref, onMounted } from 'vue';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import SplitButton from 'primevue/splitbutton';
 
-const showUserMenu = ref(false)
-const localePath = useLocalePath()
+import { useUserStore } from '@/store/userStore';
+
+const userStore = useUserStore();
+
+const searchQuery = ref('');
+const isDark = ref(false);
+const isMobileMenuOpen = ref(false);
+const userAvatar = ref('pi pi-user'); // Replace with actual user avatar
+const userMenuItems = [
+  { label: 'Your Profile', icon: 'pi pi-user', command: () => { /* Navigate to profile */ } },
+  { label: 'Settings', icon: 'pi pi-cog', command: () => { /* Navigate to settings */ } },
+  { label: 'Sign out', icon: 'pi pi-sign-out', command: () => { userStore.logout(); navigateTo('/') } }
+];
 
 onMounted(() => {
-  const navbar = document.querySelector('header')
+  const darkMode = localStorage.theme === 'dark' || 
+    (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  
+  isDark.value = darkMode;
+  
+  if (darkMode) {
+    document.documentElement.classList.add('dark');
+  }
+
+  const navbar = document.querySelector('header');
   if (navbar) {
-    const height = `${navbar.offsetHeight}px`
-    document.documentElement.style.setProperty('--navbar-height', height)
+    const height = `${navbar.offsetHeight}px`;
+    document.documentElement.style.setProperty('--navbar-height', height);
   }
-})
+});
 
-const colorMode = useColorMode()
-const isDark = computed({
-  get () {
-    return colorMode.value === 'dark'
-  },
-  set () {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  }
-})
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+  document.documentElement.classList.toggle('dark');
+  localStorage.theme = isDark.value ? 'dark' : 'light';
+};
 
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+};
 </script>
 
 <style>
 :root {
-  --navbar-height: 56px; /* Default value, will be updated by JavaScript */
+  --navbar-height: 56px;
 }
 </style>

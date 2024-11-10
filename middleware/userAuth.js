@@ -4,9 +4,9 @@ import { useUserStore } from "~/store/userStore"
 
 
 export default defineNuxtRouteMiddleware((to, _from) => {
-  const user = useSupabaseUser()
+  const userStore = useUserStore()
 
-  if (!user.value) {
+  if (!userStore.isLoggedIn) {
     return navigateTo('/auth/login')
   }
 })

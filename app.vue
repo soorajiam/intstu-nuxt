@@ -16,24 +16,6 @@
 
 
 <script setup>
-import { useUserStore } from './store/userStore';
-
-const userStore = useUserStore();
-
-if (process.client) {
-  if (localStorage.getItem('token')) {
-
-  userStore.login(
-    localStorage.getItem('user_id'),
-    localStorage.getItem('token'),
-  );
-
-  userStore.server_login(
-    localStorage.getItem('server_user_id'),
-    localStorage.getItem('server_token'),
-  );
-  }
-}
 
 
 

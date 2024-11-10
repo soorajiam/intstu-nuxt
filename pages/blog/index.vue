@@ -1,47 +1,41 @@
 <script setup>
 import debounce from 'lodash.debounce'
 
-prerenderRoutes(
-  [
-    "/blog/canada-doubling-financial-threshold-for-international-students-in-2024-to-20635",
-    "/blog/how-to-select-course-in-a-university",
-    "/blog/when-can-i-apply-for-psw-visa-in-uk"
-]
-)
+prerenderRoutes([
+  "/blog/canada-doubling-financial-threshold-for-international-students-in-2024-to-20635",
+  "/blog/how-to-select-course-in-a-university", 
+  "/blog/when-can-i-apply-for-psw-visa-in-uk"
+])
 
 const items = ref([]);
-
 const countries = ref("");
-const selectedCountry = ref("");
-selectedCountry.value = "all";
-
+const selectedCountry = ref("all");
 const { locale, t } = useI18n();
-
 const search = ref("");
-
 const next = ref("");
 const previous = ref("");
 const offset = ref(0);
 const paginationLength = ref(1);
 const page = ref(1);
 const resultCount = ref(0);
+const featuredPost = ref(null);
 
-
+// Get countries for filter dropdown
 const countries_response = useCustomFetch('country/dropdown/', {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((countries_response) => {
-        countries.value = countries_response.data.countries;
-    })
-    .catch((error) => {
-      //console.log("Error");
-    });
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+.then((countries_response) => {
+  countries.value = countries_response.data.countries;
+})
+.catch((error) => {
+  console.error("Failed to fetch countries");
+});
 
-const ListPosts = () => {
-  const { data, pending, error } =  useAPIFetch('blogs/blog/', {
+const ListPosts = async () => {
+  const { data, pending, error } = await useAPIFetch('blogs/blog/', {
     query: {
       limit: '12',
       offset: offset.value,
@@ -50,60 +44,30 @@ const ListPosts = () => {
     },
   })
 
-// To process the data after it's fetched
-if (!pending.value && !error.value) {
-  items.value = data.value.data.results;
-  //console.log("---DATA---")
-  //console.log(data);
-  // Uncomment and adapt if needed
-  // items.value.forEach(item => {
-  //   item.published_on = dayjs.unix(item.published_on).format("MMMM DD, YYYY");
-  // });
-  next.value = data.value.next;
-  previous.value = data.value.previous;
-  resultCount.value = data.value.count;
-  paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+  if (!pending.value && !error.value) {
+    items.value = data.value.data.results;
+    // Set first post as featured if on first page
+    if (offset.value === 0) {
+      featuredPost.value = items.value[0];
+      items.value = items.value.slice(1);
+    }
+    next.value = data.value.next;
+    previous.value = data.value.previous;
+    resultCount.value = data.value.count;
+    paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
+  }
 }
 
+// Initial load
+if (items.value.length === 0) {
+  ListPosts();
 }
-
-const getBlogPosts = () => {
-  const response = useCustomFetch('blogs/blog/', {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    query: {
-      limit: '12',
-      offset: offset.value,
-      search: search.value,
-      country: selectedCountry.value,
-    },
-  })
-    .then((response) => {
-      items.value = response.data.results;
-      next.value = response.next;
-      previous.value = response.previous;
-      resultCount.value = response.count;
-      paginationLength.value = Math.ceil(resultCount.value / 12) - 1;
-    })
-    .catch((error) => {
-      //console.log("Error");
-    });
-};
-
-if( items.value.length == 0){
-  getBlogPosts();
-}
-
-
-ListPosts()
 
 const nextPage = () => {
   if (next.value) {
     offset.value = offset.value + 12;
     page.value = page.value + 1;
-    // getBlogPosts();
+    ListPosts();
   }
 };
 
@@ -111,38 +75,26 @@ const previousPage = () => {
   if (previous.value) {
     offset.value = offset.value - 12;
     page.value = page.value - 1;
-    // getBlogPosts();
+    ListPosts();
   }
 };
 
 watch(page, async (newPage, oldPage) => {
   if (newPage !== oldPage) {
     try {
-      offset.value = newPage * 10; // Reset offset when search changes
-      getBlogPosts();
+      offset.value = (newPage - 1) * 12;
+      ListPosts();
     } catch (error) {
       console.error(error);
     }
   }
 });
 
-// watch(search, async (newSearch, oldSearch) => {
-//   if (newSearch !== oldSearch) {
-//     try {
-//       offset.value = 0; // Reset offset when search changes
-//       page.value = 1; // Reset page when search changes
-//       getBlogPosts();
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-// });
-
 watch(search, debounce(() => {
   try {
-    offset.value = 0; // Reset offset when search changes
-    page.value = 1; // Reset page when search changes
-    getBlogPosts();
+    offset.value = 0;
+    page.value = 1;
+    ListPosts();
   } catch (error) {
     console.error(error);
   }
@@ -151,107 +103,127 @@ watch(search, debounce(() => {
 watch(selectedCountry, async (newCountry, oldCountry) => {
   if (newCountry !== oldCountry) {
     try {
-      offset.value = 0; // Reset offset when search changes
-      page.value = 1; // Reset page when search changes
-      getBlogPosts();
+      offset.value = 0;
+      page.value = 1;
+      ListPosts();
     } catch (error) {
       console.error(error);
     }
   }
 });
 
-
-
 useSeoMeta({
-  title: 'Intstu - Blogs and News',
-  description: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
-  ogTitle: 'Intstu - Blogs and News',
-  ogDescription: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
+  title: 'Student Success Stories & Study Abroad Guides | Intstu Blog',
+  description: 'Discover expert tips, success stories and comprehensive guides about studying abroad. Get insights on scholarships, visas, and student life from those who\'ve been there.',
+  ogTitle: 'Student Success Stories & Study Abroad Guides | Intstu Blog',
+  ogDescription: 'Discover expert tips, success stories and comprehensive guides about studying abroad. Get insights on scholarships, visas, and student life from those who\'ve been there.',
   ogImage: '/images/logo/intstu_logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Intstu - Blogs and News',
-  twitterDescription: 'Read the latest blogs and news about studying abroad, scholarships, and more.',
+  twitterTitle: 'Student Success Stories & Study Abroad Guides | Intstu Blog',
+  twitterDescription: 'Discover expert tips, success stories and comprehensive guides about studying abroad. Get insights on scholarships, visas, and student life from those who\'ve been there.',
   twitterImage: '/images/logo/intstu_logo.png'
 })
-
 </script>
 
-
 <template>
-
-<section class="bg-white dark:bg-gray-900">
-    <div class="pt-8 px-4 mx-auto max-w-screen-xl lg:pt-16 lg:px-6">
-      <div class="relative w-full  h-64">
-        <h1 class=" pt-12 text-center text-black dark:text-white text-3xl">
-          {{ $t('blog_list.title') }}
-        </h1>
-
-        <!-- <div class="absolute inset-x-0 bottom-0 h-32  p-4 md:w-2/3 md:mx-auto"> -->
-          <!-- <form>
-            <div class="flex mx-auto md:w-2/3 md:mx-auto">
-              <div class="  w-64 relative inline-flex text-left">
-                <select id="dropdown-search-city" v-model="selectedCountry"
-                  class="w-full py-2.5 px-4 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                  <option value="all">All</option>
-                  <option v-for="country in countries" :key="country[0]" :value="country[0]">
-                    {{ country[1] }}
-                  </option>
-
-                  
-                </select>
-
-              </div>
-              <div class="relative w-full">
-                <input type="search" id="location-search" v-model="search"
-                  class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                  :placeholder="$t('blog_list.search')"
-                   required>
-                <button type="submit"
-                  class="absolute top-0 right-0 h-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                  <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                  </svg>
-                  <span class="sr-only">Search</span>
-                </button>
-              </div>
-            </div>
-          </form> -->
-         
-        <!-- </div> -->
-      </div>
-      <p class="p-2">{{$t("blog_list.description")}}</p>
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <div v-for="post in  items " :key="post.id">
-          <BlogList  :item="post"/>
-        </div>
-       
-
-
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <!-- Hero Section -->
+    <section class="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400 mb-6">
+            {{ $t('blog_list.title') }}
+          </h1>
+          <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300 mb-12">
+            {{ $t('blog_list.description') }}
+          </p>
           
-
-
-      </div>
-      <div v-if="resultCount>12" class="flex flex-col items-center mt-8">
-        <!-- Help text -->
-        <span class="text-sm text-gray-700 dark:text-gray-400">
-          Showing <span class="font-semibold text-gray-900 dark:text-white">{{ offset }}</span> to <span
-            class="font-semibold text-gray-900 dark:text-white">{{ (offset + 12) }}</span> of <span
-            class="font-semibold text-gray-900 dark:text-white">{{ resultCount }}</span> Entries
-        </span>
-        <!-- Buttons -->
-        <div class="inline-flex mt-2 xs:mt-0">
-          <button @click="previousPage"
-            class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 rounded-l hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            Prev
-          </button>
-          <button @click="nextPage"
-            class="flex items-center justify-center px-4 h-10 text-base font-medium text-black bg-gray-200 border-0 border-l border-gray-700 rounded-r hover:bg-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            Next
-          </button>
+          <!-- Search Bar -->
+          <div class="max-w-3xl mx-auto flex flex-col sm:flex-row gap-4">
+            <select v-model="selectedCountry" 
+              class="w-full sm:w-1/3 px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+              <option value="all">All Countries</option>
+              <option v-for="country in countries" :key="country[0]" :value="country[0]">
+                {{ country[1] }}
+              </option>
+            </select>
+            
+            <div class="relative w-full sm:w-2/3">
+              <input type="search" v-model="search"
+                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                :placeholder="$t('blog_list.search')">
+              <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="pi pi-search"></i>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Featured Post -->
+    <section v-if="featuredPost" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl transform transition-all hover:scale-[1.02]">
+        <div class="grid md:grid-cols-2 gap-8">
+          <img :src="featuredPost.image" :alt="featuredPost.title" class="w-full h-96 object-cover">
+          <div class="p-8 flex flex-col justify-center">
+            <span class="text-blue-600 dark:text-blue-400 font-semibold mb-4">Featured Article</span>
+            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{{ featuredPost.title }}</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">{{ featuredPost.excerpt }}</p>
+            <NuxtLink :to="'/blog/' + featuredPost.slug" 
+              class="inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-800">
+              Read More
+              <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="post in items" :key="post.id" 
+          class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-[1.03]">
+          <BlogList :item="post"/>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div v-if="resultCount > 12" class="flex justify-center items-center gap-4 mt-16 mb-8">
+        <button @click="previousPage" 
+          class="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
+          :disabled="!previous">
+          Previous
+        </button>
+        <span class="text-gray-600 dark:text-gray-300">
+          Page {{ page }} of {{ paginationLength + 1 }}
+        </span>
+        <button @click="nextPage"
+          class="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
+          :disabled="!next">
+          Next
+        </button>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 sm:p-12">
+        <div class="max-w-2xl mx-auto text-center">
+          <h2 class="text-3xl font-bold text-white mb-4">Stay Updated with Study Abroad News</h2>
+          <p class="text-blue-100 mb-8">Get the latest updates, tips and success stories delivered to your inbox.</p>
+          <form class="flex flex-col sm:flex-row gap-4 justify-center">
+            <input type="email" placeholder="Enter your email" 
+              class="px-6 py-3 rounded-lg flex-1 max-w-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <button class="px-8 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
