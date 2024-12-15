@@ -251,4 +251,22 @@ export default defineNuxtConfig({
     '~/plugins/primevue.js',
     '~/plugins/dayjs.js'
   ],
+
+  nitro: {
+    externals: {
+      inline: ['canvas']
+    }
+  },
+
+  build: {
+    transpile: ['tough-cookie']
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        'unenv/runtime/mock/proxy-cjs': './node_modules/unenv/runtime/mock/proxy-cjs/index.cjs'
+      }
+    }
+  }
 })
