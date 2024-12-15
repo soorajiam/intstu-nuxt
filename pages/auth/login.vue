@@ -15,10 +15,13 @@
 
       <div class="mt-8">
         <!-- Google Sign In -->
-        <button class="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-          <img src="" alt="Google" class="w-5 h-5">
-          <span class="text-gray-700 dark:text-gray-300 font-medium">Continue with Google</span>
-        </button>
+        <Button
+          icon="pi pi-google"
+          class="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white dark:bg-gray-800"
+          label="Continue with Google" 
+          :severity="isDark ? 'secondary' : 'secondary'"
+          :class="{'p-button-outlined': isDark}"
+        />
 
         <div class="mt-6 relative">
           <div class="absolute inset-0 flex items-center">
@@ -81,7 +84,7 @@
             
             <button
               type="button"
-              @click="handleLogin"
+              @click.prevent="handleLogin"
               class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
               Sign in
@@ -122,6 +125,13 @@ const password = ref('');
 const error_message = ref('');
 const token = ref('');
 
+// Check if user is already logged in on component mount
+onMounted(() => {
+  if (userStore.isLogged) {
+    navigateTo('/dashboard');
+  }
+});
+
 function validateEmail() {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
     error_message.value = '';
@@ -132,8 +142,9 @@ function validateEmail() {
 
 const handleLogin = async () => {
   try {
-    validateTurnstile();
+    await validateTurnstile();
     if (error_message.value || !email.value) return;
+    
     const response = await useCustomFetch('auth/login/', {
       method: "POST",
       headers: {
@@ -144,29 +155,45 @@ const handleLogin = async () => {
         password: password.value,
       }),
     });
+
     if (response.code === 200 || response.code === 201) {
-      userStore.login(
+      // Store user data in Pinia store
+      await userStore.login(
         response.data.user.id,
         response.data.token,
         response.data.user.first_name,
         response.data.user.last_name
       );
-      navigateTo('/dashboard')
+
+      // Add token to localStorage
+      if (process.client) {
+        localStorage.setItem('auth_token', response.data.token);
+      }
+
+      // Verify login state and redirect
+      if (userStore.isLogged) {
+        await navigateTo('/dashboard');
+      } else {
+        error_message.value = "Login failed - session not established";
+      }
+    } else {
+      error_message.value = response.message || "Login failed";
     }
   } catch (error_obj) {
-    error_message.value = "Error while user login"
+    error_message.value = "Error while user login";
+    console.error("Login error:", error_obj);
   }
 };
 
 const validateTurnstile = async () => {
   try {
-    const { data, error } = await useFetch('/_turnstile/validate', {
+      const { data, error } = await useFetch('/_turnstile/validate', {
       method: 'POST',
       body: { token: token }
     });
 
     if (error.value) {
-      error.value = 'Validation failed. Please try again.';
+      error_message.value = 'Validation failed. Please try again.';
       turnstile_validated.value = false;
     } else {
       console.log('Validation successful: ' + data.value.message);
@@ -174,7 +201,7 @@ const validateTurnstile = async () => {
       error_message.value = '';
     }
   } catch (err) {
-    error.value = 'Error: ' + err.message;
+    error_message.value = 'Error: ' + err.message;
     turnstile_validated.value = false;
   }
 };

@@ -61,19 +61,24 @@
       <!-- Pagination -->
       <div class="mt-12 flex flex-col items-center">
         <span class="text-sm text-gray-600 dark:text-gray-400">
-          Showing <span class="font-semibold">{{ (page - 1) * 10 + 1 }}</span> to <span class="font-semibold">{{ Math.min(page * 10, resultCount) }}</span> of <span class="font-semibold">{{ resultCount }}</span> Universities
+          <!-- <ClientOnly> -->
+            Showing <span class="font-semibold">{{ (page - 1) * 10 + 1 }}</span> to <span class="font-semibold">{{ Math.min(page * 10, resultCount) }}</span> of <span class="font-semibold">{{ resultCount }}</span> Universities
+          <!-- </ClientOnly> -->
         </span>
         
         <div class="mt-4 flex space-x-2">
-          <a :href="page > 1 ? NuxtLink({ query: { page: page - 1 } }) : ''"
-            class="px-6 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200">
-            Previous
-          </a>
-          <a :href="page < Math.ceil(resultCount/10) ? NuxtLink({ query: { page: page + 1 } }) : ''"
-            class="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200">
-            Next
-          </a>
+          <ClientOnly>
+            <Button @click="page = page > 1 ? page - 1 : 1"
+              class="px-6 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200">
+              Previous
+            </Button>
+            <Button @click="page = page < Math.ceil(resultCount/10) ? page + 1 : Math.ceil(resultCount/10)"
+              class="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200">
+              Next
+          </Button>
+          </ClientOnly>
         </div>
+      </div>
 
         <!-- Search Tip -->
         <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-8 text-center transform hover:scale-[1.02] transition-all duration-300">
@@ -92,7 +97,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 
   <!-- Login Modal -->
@@ -102,8 +106,8 @@
       
       <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-lg w-full p-8">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Join Our Academic Community</h3>
-        <p class="text-gray-600 dark:text-gray-300 mb-6">
-          Create your free account to unlock exclusive features:
+        <div class="text-gray-600 dark:text-gray-300 mb-6">
+          <p>Create your free account to unlock exclusive features:</p>
           <ul class="mt-4 space-y-2">
             <li class="flex items-center">
               <i class="pi pi-check text-green-500 mr-2"></i>
@@ -118,7 +122,7 @@
               Get tailored university recommendations
             </li>
           </ul>
-        </p>
+        </div>
         
         <div class="flex justify-end space-x-4">
           <button @click="openLoginModal" class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -136,6 +140,13 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import debounce from 'lodash.debounce'
+import { useNotificationStore } from '~/store/notificationStore'
+
+const notificationStore = useNotificationStore()
+
+if (process.client) {
+  notificationStore.info('Welcome to Intstu!');
+}
 
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
@@ -219,7 +230,7 @@ const getInstituteList = () => {
 
 
 const ListInstitutes = async () => {
-  const { data, pending, error } = await  useAPIFetch('institutes/institutions/', {
+  const { data, pending, error } = await  useSsrfetch('institutes/institutions/', {
     query: {
       limit: '10',
       offset: offset.value,
@@ -239,24 +250,30 @@ const ListInstitutes = async () => {
 
 const ssrListInstitutes = async () => {
   const { data, pending, error } = await useSsrfetch('institutes/institutions/', {
-    offset: offset.value,
-    search: search.value,
-    country: selectedCountry.value,
+    query: {
+      limit: '10',
+      offset: offset.value,
+      search: search.value,
+      country: selectedCountry.value,
+    }
   });
   if (!pending.value && !error.value) {
     items.value = data.value.data.results;
-    next.value = data.value.next;
-    previous.value = data.value.previous;
-    resultCount.value = data.value.count;
+    next.value = data.value.data.next;
+    previous.value = data.value.data.previous;
+    resultCount.value = data.value.data.count;
     paginationLength.value = Math.ceil(resultCount.value / 10);
   }
 };
 ssrListInstitutes();
+// offset = computed(() => (page.value - 1) * 10);
+page.value = 1;
+
 
 watch(page, async (newPage, oldPage) => {
   if (newPage !== oldPage) {
     try {
-      ssrListInstitutes();
+      ListInstitutes();
     } catch (error) {
       console.error(error);
     }

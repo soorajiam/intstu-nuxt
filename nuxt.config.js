@@ -1,5 +1,74 @@
+import { definePreset } from '@primevue/themes';
 import Aura from '@primevue/themes/aura';
 
+const MyCustomPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      // Blue shades
+      50: '#eff6ff',   // blue-50
+      100: '#dbeafe',  // blue-100
+      200: '#bfdbfe',  // blue-200
+      300: '#93c5fd',  // blue-300
+      400: '#60a5fa',  // blue-400
+      500: '#3b82f6',  // blue-500
+      600: '#2563eb',  // blue-600 (main primary color)
+      700: '#1d4ed8',  // blue-700
+      800: '#1e40af',  // blue-800
+      900: '#1e3a8a'   // blue-900
+    },
+    colorScheme: {
+      light: {
+        surface: {
+          ground: '#f8fafc',      // slate-100 for main background
+          section: '#f1f5f9',     // slate-100 variant
+          card: '#ffffff',        // white
+          overlay: '#ffffff',     // white
+          border: '#e2e8f0',      // slate-200
+          hover: '#f1f5f9',       // slate-100
+          toast: '#ffffff',       // white
+          toastBorder: '#e2e8f0', // slate-200
+          toastBackground: '#f1f5f9', // slate-100
+          toastText: '#020617', // slate-950 (near black)
+          toastIcon: '#020617', // slate-950 (near black)
+          toastIconHover: '#020617', // slate-950 (near black)
+          toastIconClose: '#020617', // slate-950 (near black)
+          toastIconCloseHover: '#020617', // slate-950 (near black)
+          text: '#020617', // slate-950 (near black)
+        }
+      },
+      dark: {
+        surface: {
+          ground: '#020617',      // slate-950 (near black)
+          section: '#0f172a',     // slate-900
+          card: '#1e293b',        // slate-800
+          overlay: '#1e293b',     // slate-800
+          border: '#334155',      // slate-700
+          hover: '#0f172a',       // slate-900
+          toast: '#020617',       // slate-950 (near black)
+          toastBorder: '#e2e8f0', // slate-200
+          toastBackground: '#f1f5f9', // slate-100
+          toastText: '#ffffff', // white
+          toastIcon: '#ffffff', // white
+          toastIconHover: '#ffffff', // white
+          toastIconClose: '#ffffff', // white
+          toastIconCloseHover: '#ffffff', // white
+          text: '#ffffff', // white
+        }
+      }
+    },
+    // Additional accent colors
+    accent: {
+      indigo: {
+        light: '#312e81',         // indigo-900
+        dark: '#e0e7ff'          // indigo-100
+      },
+      grey: {
+        light: '#4b5563',        // grey-600
+        dark: '#9ca3af'          // grey-400
+      }
+    }
+  }
+});
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -33,30 +102,31 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
     'nuxt-tiptap-editor',
-    // 'tailwindcss/nesting',
-    // '@nuxt/ui',
-    '@primevue/nuxt-module'
+    '@nuxtjs/color-mode',
+    '@primevue/nuxt-module',
   ],
 
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light'
+  },
+
   primevue: {
-    usePrimeVue: true,
     components: {
-      include: ['Button', 'InputText', 'Dialog', 'Dropdown'] // Added Dropdown
+      include: ['Button', 'InputText', 'Dialog', 'Dropdown']
     },
     options: {
       ripple: true,
-      autoImport: true,
-      inputVariant: 'filled',
+      inputStyle: 'filled',
       theme: {
-          preset: Aura,
-          options: {
-              prefix: 'p',
-              darkModeSelector: 'system',
-              cssLayer: false
-          }
+        preset: MyCustomPreset,
+        options: {
+          darkModeSelector: '.dark'
+        }
       }
     },
-    cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
+    cssLayerOrder: 'tailwind-base, primevue'
   },
 
   i18n: {
@@ -128,7 +198,6 @@ export default defineNuxtConfig({
 
   css: [
     '~/assets/css/main.css',
-
     'primeicons/primeicons.css'
   ],
 
@@ -175,4 +244,11 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-08-02',
+
+  plugins: [
+    '~/plugins/auth.js',
+    '~/plugins/toast.js',
+    '~/plugins/primevue.js',
+    '~/plugins/dayjs.js'
+  ],
 })

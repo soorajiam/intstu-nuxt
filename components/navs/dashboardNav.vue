@@ -23,7 +23,9 @@
         <!-- Navigation Icons -->
         <div class="flex items-center space-x-4 ml-4">
           <Button icon="pi pi-home" class="p-button-text" tooltip="Home" tooltipPosition="bottom" />
-          <Button icon="pi pi-users" class="p-button-text" tooltip="My Network" tooltipPosition="bottom" />
+          <NuxtLink to="/discussion">
+            <Button icon="pi pi-users" class="p-button-text" tooltip="My Network" tooltipPosition="bottom" />
+          </NuxtLink>
           <Button icon="pi pi-briefcase" class="p-button-text" tooltip="Jobs" tooltipPosition="bottom" />
           <Button icon="pi pi-comments" class="p-button-text" tooltip="Messaging" tooltipPosition="bottom" />
           <Button icon="pi pi-bell" class="p-button-text" tooltip="Notifications" tooltipPosition="bottom" />
@@ -56,7 +58,9 @@
         <InputText placeholder="Search" v-model="searchQuery" :style="{ width: '100%' }" class="mb-2" />
 
         <Button icon="pi pi-home" label="Home" class="p-button-text w-full text-left" />
-        <Button icon="pi pi-users" label="My Network" class="p-button-text w-full text-left" />
+        <NuxtLink to="/discussion" class="p-button-text w-full text-left">
+          <Button icon="pi pi-users" label="My Network" class="p-button-text w-full text-left" />
+        </NuxtLink>
         <Button icon="pi pi-briefcase" label="Jobs" class="p-button-text w-full text-left" />
         <Button icon="pi pi-comments" label="Messaging" class="p-button-text w-full text-left" />
         <Button icon="pi pi-bell" label="Notifications" class="p-button-text w-full text-left" />

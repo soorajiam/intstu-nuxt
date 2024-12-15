@@ -50,15 +50,20 @@
                 {{ $t('home.institutes') }}</a>
             </li>
             <li>
+              <a href="/discussion/"
+                class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors duration-200">
+                {{ $t('home.discussion') }}</a>
+            </li>
+            <li>
               <a href="/contact/"
                 class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors duration-200">
                 {{ $t('home.contact') }}</a>
             </li>
             <Button
-              @click="toggleTheme"
-              :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+              @click="themeStore.toggleTheme"
+              :icon="themeStore.isDark ? 'pi pi-sun' : 'pi pi-moon'"
               class="p-button-rounded p-button-text hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-              v-tooltip.bottom="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+              v-tooltip.bottom="themeStore.isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
             />
           </ul>
         </div>
@@ -71,26 +76,22 @@
 import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
 import { useUserStore } from '~/store/userStore';
+import { useThemeStore } from '~/store/themeStore';
 
 const userStore = useUserStore();
+const themeStore = useThemeStore();
 const mobileMenuOpen = ref(false);
-const isDark = ref(false);
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  document.documentElement.classList.toggle('dark');
-  localStorage.theme = isDark.value ? 'dark' : 'light';
-};
 
 onMounted(() => {
-  const darkMode = localStorage.theme === 'dark' || 
-    (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  themeStore.initTheme();
   
-  isDark.value = darkMode;
-  
-  if (darkMode) {
-    document.documentElement.classList.add('dark');
-  }
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.theme) { // Only react to system changes if user hasn't set a preference
+      themeStore.isDark = e.matches;
+      document.documentElement.classList.toggle('dark', e.matches);
+    }
+  });
 });
 </script>
 

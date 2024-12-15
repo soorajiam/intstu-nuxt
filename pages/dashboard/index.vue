@@ -2,34 +2,35 @@
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400 mb-6">
-        Thank You for Being an Early Supporter!
+        Welcome to Intstu Beta!
       </h1>
 
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl mb-8">
         <div class="prose dark:prose-invert max-w-none">
           <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
-            Dear {{ userStore.getFirstName }}, we're thrilled to have you as one of our first users! 🎉
+            Hi {{ userStore.getFirstName }}, we're excited to have you here! 🎉
           </p>
 
           <p class="text-gray-600 dark:text-gray-300 mb-4">
-            We're working hard to build an amazing dashboard experience for you. As a token of our appreciation for your early support, we're offering:
+            We're currently in beta, and we've enabled two core modules for you to explore:
           </p>
 
           <ul class="text-left text-gray-600 dark:text-gray-300 space-y-3 mb-6">
             <li class="flex items-center">
-              <span class="text-green-500 mr-2">✓</span> 1 month of premium features completely FREE when we launch
+              <span class="text-green-500 mr-2">✓</span> <strong>Institutes Module:</strong> <NuxtLink to="/institutes" class="text-blue-600 dark:text-blue-400 hover:underline">Browse and learn about different educational institutions</NuxtLink>
             </li>
             <li class="flex items-center">
-              <span class="text-green-500 mr-2">✓</span> Direct access to our development team for feedback and support
-            </li>
-            <li class="flex items-center">
-              <span class="text-green-500 mr-2">✓</span> Early access to new features before public release
+              <span class="text-green-500 mr-2">✓</span> <strong>Discussion Module:</strong> <NuxtLink to="/discussion" class="text-blue-600 dark:text-blue-400 hover:underline">Engage in conversations about institutions and education</NuxtLink>
             </li>
           </ul>
+
+          <p class="text-gray-600 dark:text-gray-300 mb-4">
+            Feel free to explore these features and share your thoughts with us. More modules are coming soon!
+          </p>
         </div>
 
         <div class="mt-8 space-y-4">
-          <p class="text-gray-600 dark:text-gray-300">Help us make Intstu better by sharing your thoughts:</p>
+          <p class="text-gray-600 dark:text-gray-300">Help us improve by sharing your experience:</p>
           
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <button @click="showFeedbackModal = true"
@@ -38,7 +39,7 @@
               Send Feedback
             </button>
             
-            <a href="https://twitter.com/intent/tweet?text=I'm excited to be an early supporter of @intstu! Join me in shaping the future of education 🚀" 
+            <a href="https://twitter.com/intent/tweet?text=I'm exploring @intstu's new platform for education! Join me in the beta 🎓" 
                target="_blank"
                class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
               <i class="pi pi-twitter mr-2"></i>
@@ -49,7 +50,7 @@
       </div>
 
       <p class="text-sm text-gray-500 dark:text-gray-400">
-        Expected launch date: {{ new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString() }}
+        More features coming soon! Stay tuned.
       </p>
     </div>
 

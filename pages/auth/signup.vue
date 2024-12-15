@@ -15,10 +15,14 @@
 
       <div class="mt-8">
         <!-- Google Sign Up -->
-        <button class="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-          <img src="" alt="Google" class="w-5 h-5">
-          <span class="text-gray-700 dark:text-gray-300 font-medium">Sign up with Google</span>
-        </button>
+           <!-- Google Sign In -->
+           <Button
+          icon="pi pi-google"
+          class="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white dark:bg-gray-800"
+          label="Continue with Google" 
+          :severity="isDark ? 'secondary' : 'secondary'"
+          :class="{'p-button-outlined': isDark}"
+        />
 
         <div class="mt-6 relative">
           <div class="absolute inset-0 flex items-center">
@@ -107,7 +111,7 @@
             
             <button
               type="button"
-              @click="handleSignup"
+              @click.prevent="handleSignup"
               class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
               Create Account
@@ -184,6 +188,7 @@ function validatePassword() {
 
 const handleSignup = async () => {
   try {
+    await validateTurnstile();
     if (error_message.value || !email.value) return;
     const response = await useCustomFetch('auth/signup/', {
       method: "POST",

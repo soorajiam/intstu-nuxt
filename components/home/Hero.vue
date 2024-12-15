@@ -40,7 +40,7 @@
                 </ul>
             </div>
             <div class="justify-center p-4 max-w-screen-sm bg-white rounded-lg border border-gray-200 shadow lg:mt-0 lg:col-span-5 xl:col-span-4 sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <form class="space-y-6" action="">
+                <form class="space-y-6">
                     <h2 class="text-xl font-medium text-gray-900 dark:text-white">Login to your account</h2>
                    
                     <div>
@@ -79,14 +79,15 @@
                       </div>
                       <a href="#" class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
                     </div>
-                    <p class="text-red-500 text-sm" v-if="error_message">{{ error_message }}</p>
-                    <NuxtTurnstile v-if="password.length > 2" class="py-3 px-7 mb-2" v-model="token" />
-                    <a
-                      class="cursor-pointer inline-block py-3 px-7 mb-2 w-full text-base text-blue-50 font-medium text-center leading-6 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm"
-                      @click="handleLogin"
+                    <p v-if="error_message" class="text-red-500 text-sm mb-4">{{ error_message }}</p>
+                    <NuxtTurnstile v-if="password.length>2" v-model="token" class="mb-4" />
+                    <button
+                      type="button"
+                      @click.prevent="handleLogin"
+                      class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                     >
-                      Sign In
-                    </a>
+                      Sign in
+                    </button>
                     <div class="text-center mt-6">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Not a member yet?</p>
                         <p class="text-base font-medium mb-3">Join thousands of students and educators!</p>
@@ -106,67 +107,70 @@
 <script setup>
 import { useUserStore } from '~/store/userStore';
 import { useRouter } from '#app';
+
 const router = useRouter();
 const userStore = useUserStore();
-const client = useSupabaseClient();
-const localePath = useLocalePath();
 
+const turnstile_validated = ref(false);
 const email = ref('');
 const password = ref('');
-const token = ref('');
 const error_message = ref('');
+const token = ref('');
 
-const validateEmail = () => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
-        error_message.value = '';
-    } else {
-        error_message.value = 'Please enter a valid email address';
+function validateEmail() {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
+    error_message.value = '';
+  } else {
+    error_message.value = 'Please enter a valid email address';
+  }
+}
+
+const handleLogin = async () => {
+  try {
+    await validateTurnstile();
+    if (error_message.value || !email.value) return;
+    const response = await useCustomFetch('auth/login/', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+    });
+    if (response.code === 200 || response.code === 201) {
+      userStore.login(
+        response.data.user.id,
+        response.data.token,
+        response.data.user.first_name,
+        response.data.user.last_name
+      );
+      navigateTo('/dashboard')
     }
+  } catch (error_obj) {
+    error_message.value = "Error while user login"
+  }
 };
 
 const validateTurnstile = async () => {
-    try {
-        const { data, error } = await useFetch('/_turnstile/validate', {
-            method: 'POST',
-            body: { token: token.value }
-        });
+  try {
+    const { data, error } = await useFetch('/_turnstile/validate', {
+      method: 'POST',
+      body: { token: token }
+    });
 
-        if (error.value) {
-            error_message.value = 'Validation failed. Please try again.';
-        } else {
-            console.log('Validation successful: ' + data.value.message);
-        }
-    } catch (err) {
-        error_message.value = 'Error: ' + err.message;
+    if (error_message.value) {
+      error_message.value = 'Validation failed. Please try again.';
+      turnstile_validated.value = false;
+    } else {
+      console.log('Validation successful: ' + data.value.message);
+      turnstile_validated.value = true;
+      error_message.value = '';
     }
-};
-
-const handleLogin = async () => {
-    try {
-        validateTurnstile();
-        if (error_message.value || !email.value) return;
-        const response = await useCustomFetch('auth/login/', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email.value,
-                password: password.value,
-            }),
-        });
-
-        if (response.code === 200 || response.code === 201) {
-            userStore.login(
-                response.data.user.id,
-                response.data.token,
-                response.data.user.first_name,
-                response.data.user.last_name
-            );
-            navigateTo('/dashboard');
-        }
-    } catch (error_obj) {
-        error_message.value = "Error while user login";
-    }
+  } catch (err) {
+    error_message.value = 'Error: ' + err.message;
+    turnstile_validated.value = false;
+  }
 };
 </script>
