@@ -252,21 +252,8 @@ export default defineNuxtConfig({
     '~/plugins/dayjs.js'
   ],
 
-  nitro: {
-    externals: {
-      inline: ['canvas']
-    }
-  },
+  middleware: [
+    '~/middleware/userAuth.js'
+  ],
 
-  build: {
-    transpile: ['tough-cookie']
-  },
-
-  vite: {
-    resolve: {
-      alias: {
-        'unenv/runtime/mock/proxy-cjs': './node_modules/unenv/runtime/mock/proxy-cjs/index.cjs'
-      }
-    }
-  }
 })
