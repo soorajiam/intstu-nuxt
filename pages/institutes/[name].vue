@@ -23,12 +23,10 @@ const formatDate = (date) => {
 
 const ssrListInstitute = async () => {
   try {
-    const { data, pending, error } = await useSsrfetch(`institutes/institutions/public/${name.value}/`, {
-      method: 'GET'
-    });
+    const { data: instituteData, error: instituteError } = await useSsrfetch(`institutes/institutions/public/${name.value}/`);
     
-    if (!pending.value && !error.value && data.value?.data) {
-      details.value = data.value.data;
+    if (!instituteError.value && instituteData.value?.data) {
+      details.value = instituteData.value.data;
       paragraphs.value = details.value.description?.split("\n\n") || [];
     }
   } catch (err) {
@@ -39,16 +37,15 @@ const ssrListInstitute = async () => {
 const fetchDiscussions = async () => {
   loading.value = true;
   try {
-    const { data, pending, error } = await useSsrfetch('discussion/topics/', {
-      method: 'GET',
+    const { data: discussionsData, error: discussionsError } = await useSsrfetch('discussion/topics/', {
       query: {
         institute_id: details.value?.id,
         limit: '5'
       }
     });
     
-    if (!pending.value && !error.value && data.value?.data) {
-      instituteDiscussions.value = data.value.data.results || [];
+    if (!discussionsError.value && discussionsData.value?.data) {
+      instituteDiscussions.value = discussionsData.value.data.results || [];
       console.log('Discussions:', instituteDiscussions.value);
     }
   } catch (error) {
@@ -58,12 +55,12 @@ const fetchDiscussions = async () => {
   }
 };
 
-onMounted(async () => {
+
   await ssrListInstitute();
   if (details.value?.id) {
     await fetchDiscussions();
   }
-});
+
 
 useServerSeoMeta({
   title: () => 'Intstu | ' + details.value.name,
