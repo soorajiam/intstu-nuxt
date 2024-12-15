@@ -101,7 +101,7 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
-    'nuxt-tiptap-editor',
+    // 'nuxt-tiptap-editor',
     '@nuxtjs/color-mode',
     '@primevue/nuxt-module',
   ],
