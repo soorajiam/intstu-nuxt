@@ -99,7 +99,7 @@ export default defineNuxtConfig({
     'nuxt-gtag',
     '@nuxtjs/turnstile',
     'nuxt-og-image',
-    '@nuxtjs/supabase',
+    // '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
     // 'nuxt-tiptap-editor',
     '@nuxtjs/color-mode',
@@ -152,26 +152,44 @@ export default defineNuxtConfig({
 
   },
 
-  supabase: {
-    redirect: false
-    // redirectOptions: {
-    //   login: '/en/login',
-    //   callback: '/en/confirm',
-    //   include: undefined,
-    //   exclude: ['/en/auth/signup'],
-    //   cookieRedirect: false,
-    // }
-  },
-
-  // nitro: {
-  //   prerender: {
-  //     crawlLinks: true,
-  //     routes: ['blog/*', 'sitemap.xml', '/institutes/*','/en'],
-  //     ignore: ['/auth', ''],
-  //   },
+  // supabase: {
+  //   redirect: false
+  //   // redirectOptions: {
+  //   //   login: '/en/login',
+  //   //   callback: '/en/confirm',
+  //   //   include: undefined,
+  //   //   exclude: ['/en/auth/signup'],
+  //   //   cookieRedirect: false,
+  //   // }
   // },
 
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false
+    },
+    preset: 'cloudflare-pages',
+    externals: {
+      inline: ['tough-cookie', 'node-fetch']
+    },
+    routeRules: {
+      '/**': { cors: true }
+    },
+    resolve: {
+      alias: {
+        'canvas': false,
+        'jsdom': false
+      }
+    }
+  },
 
+  // Modify runtimeConfig to avoid environment variable issues
+  runtimeConfig: {
+    public: {
+      stripePubKey: process.env.STRIPE_PUBLIC_KEY || '',
+      turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || '',
+      gaId: process.env.GA_ID || ''
+    }
+  },
 
   site: {
     // url: 'http://intstu.com',
@@ -255,5 +273,15 @@ export default defineNuxtConfig({
   middleware: [
     '~/middleware/userAuth.js'
   ],
+
+  experimental: {
+    payloadExtraction: false,
+    inlineSSRStyles: false,
+    treeshakeClientOnly: true
+  },
+
+  optimization: {
+    minimize: true
+  },
 
 })
