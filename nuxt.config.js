@@ -98,7 +98,6 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     'nuxt-gtag',
     '@nuxtjs/turnstile',
-    'nuxt-og-image',
     // '@nuxtjs/supabase',
     '@stefanobartoletti/nuxt-social-share',
     // 'nuxt-tiptap-editor',
@@ -176,8 +175,10 @@ export default defineNuxtConfig({
     },
     resolve: {
       alias: {
+        'jsdom': false,
         'canvas': false,
-        'jsdom': false
+        'isomorphic-dompurify': 'dompurify',
+        'marked': '@markedjs/marked'
       }
     }
   },

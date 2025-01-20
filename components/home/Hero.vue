@@ -2,175 +2,90 @@
     <section class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
         <div class="grid py-8 px-4 mx-auto max-w-screen-xl lg:gap-12 xl:gap-0 lg:py-16 lg:grid-cols-12">
             <div class="place-self-center mr-auto mb-10 lg:col-span-7 xl:col-span-8 xl:mb-0">
-                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-1.5 rounded-full dark:bg-blue-900 dark:text-blue-200 mb-4 inline-block">Your Future Starts Here</span>
-                <h1 class="mb-4 max-w-2xl text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">Find Your Perfect University Match</h1>
-                <p class="mb-6 max-w-2xl text-gray-600 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">Compare thousands of universities, read authentic reviews, and connect with current students. Make an informed decision about your higher education journey with personalized recommendations.</p>
+                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-1.5 rounded-full dark:bg-blue-900 dark:text-blue-200 mb-4 inline-block">AI-Powered University Insights</span>
+                <h1 class="mb-4 max-w-2xl text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">Get Instant Answers About Any University</h1>
+                <p class="mb-6 max-w-2xl text-gray-600 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">Chat with our AI to learn everything about your dream universities. Get instant, accurate answers about programs, campus life, admissions, and more - available 24/7.</p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="#" class="inline-flex items-center py-3 px-5 font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
-                        Get Started Free
+                    <a href="/universities" class="inline-flex items-center py-3 px-5 font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        Ask About Universities
                     </a>
-                    <a href="#" class="inline-flex items-center py-3 px-5 font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700">
-                        <svg class="mr-2 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 00 14 8v4a1 1 0 00 .553.894l2 1A1 1 0 00 18 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
-                        Watch How It Works
+                    <a href="/explore" class="inline-flex items-center py-3 px-5 font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                        <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Explore Universities
                     </a>
                 </div>
                 <ul class="hidden xl:flex justify-between pt-8 mt-16 border-t border-gray-200/60 dark:border-gray-700/60">
                     <li class="flex items-center group transition-transform hover:transform hover:translate-y-[-2px]">
-                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">{{$t('home.hero.institution_count')}}</span>
+                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">24/7</span>
+                        <div class="block pl-5 text-lg">
+                            <div class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">AI Chat</div>
+                            <div class="text-gray-500 dark:text-gray-400">Always Available</div>
+                        </div>
+                    </li>
+                    <li class="flex items-center group transition-transform hover:transform hover:translate-y-[-2px]">
+                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">1000+</span>
                         <div class="block pl-5 text-lg">
                             <div class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Universities</div>
-                            <div class="text-gray-500 dark:text-gray-400">Worldwide Network</div>
+                            <div class="text-gray-500 dark:text-gray-400">Detailed Info</div>
                         </div>
                     </li>
                     <li class="flex items-center group transition-transform hover:transform hover:translate-y-[-2px]">
-                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">{{$t('home.hero.courses_count')}}</span>
+                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">100%</span>
                         <div class="block pl-5 text-lg">
-                            <div class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Programs</div>
-                            <div class="text-gray-500 dark:text-gray-400">To Choose From</div>
-                        </div>
-                    </li>
-                    <li class="flex items-center group transition-transform hover:transform hover:translate-y-[-2px]">
-                        <span class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">{{$t('home.hero.student_count')}}</span>
-                        <div class="block pl-5 text-lg">
-                            <div class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Students</div>
-                            <div class="text-gray-500 dark:text-gray-400">Found Their Path</div>
+                            <div class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Accurate</div>
+                            <div class="text-gray-500 dark:text-gray-400">Up-to-date Info</div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="justify-center p-4 max-w-screen-sm bg-white rounded-lg border border-gray-200 shadow lg:mt-0 lg:col-span-5 xl:col-span-4 sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <form class="space-y-6">
-                    <h2 class="text-xl font-medium text-gray-900 dark:text-white">Login to your account</h2>
-                   
-                    <div>
-                      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
-                      <input
-                        v-model="email"
-                        @blur="validateEmail"
-                        type="email"
-                        name="email"
-                        id="email"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="name@intstu.com"
-                        required
-                      >
+            <div class="lg:col-span-5 xl:col-span-4 lg:mt-0 lg:flex">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                                    </svg>
+                                </div>
+                                <span class="ml-3 font-semibold text-gray-900 dark:text-white">University AI Assistant</span>
+                            </div>
+                            <span class="flex items-center text-sm text-green-500">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                Online
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Ask anything about any university...">
+                            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <button class="text-sm px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-blue-900 dark:hover:text-blue-300 w-full text-left">
+                                What are the admission requirements for Harvard?
+                            </button>
+                            <button class="text-sm px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-blue-900 dark:hover:text-blue-300 w-full text-left">
+                                Tell me about Stanford's Computer Science program
+                            </button>
+                            <button class="text-sm px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-blue-900 dark:hover:text-blue-300 w-full text-left">
+                                What's the cost of living at MIT?
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                      <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
-                      <input
-                        v-model="password"
-                        type="password"
-                        name="password"
-                        id="password"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="••••••••"
-                        required
-                      >
-                    </div>
-                    <div class="flex items-start">
-                      <div class="flex items-start">
-                          <div class="flex items-center h-5">
-                            <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
-                          </div>
-                          <div class="ml-3 text-sm">
-                            <label for="remember" class="font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                          </div>
-                      </div>
-                      <a href="#" class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-                    </div>
-                    <p v-if="error_message" class="text-red-500 text-sm mb-4">{{ error_message }}</p>
-                    <NuxtTurnstile v-if="password.length>2" v-model="token" class="mb-4" />
-                    <button
-                      type="button"
-                      @click.prevent="handleLogin"
-                      class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                    >
-                      Sign in
-                    </button>
-                    <div class="text-center mt-6">
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Not a member yet?</p>
-                        <p class="text-base font-medium mb-3">Join thousands of students and educators!</p>
-                        <NuxtLink
-                            class="inline-block text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 px-6 py-2.5 rounded-full transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
-                            to="/auth/signup">
-                            Create Free Account
-                        </NuxtLink>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">No credit card required</p>
-                    </div>
-                </form>
-            </div>                
+                </div>
+            </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import { useUserStore } from '~/store/userStore';
-import { useRouter } from '#app';
-
-const router = useRouter();
-const userStore = useUserStore();
-
-const turnstile_validated = ref(false);
-const email = ref('');
-const password = ref('');
-const error_message = ref('');
-const token = ref('');
-
-function validateEmail() {
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
-    error_message.value = '';
-  } else {
-    error_message.value = 'Please enter a valid email address';
-  }
-}
-
-const handleLogin = async () => {
-  try {
-    await validateTurnstile();
-    if (error_message.value || !email.value) return;
-    const response = await useCustomFetch('auth/login/', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value,
-      }),
-    });
-    if (response.code === 200 || response.code === 201) {
-      userStore.login(
-        response.data.user.id,
-        response.data.token,
-        response.data.user.first_name,
-        response.data.user.last_name
-      );
-      navigateTo('/dashboard')
-    }
-  } catch (error_obj) {
-    error_message.value = "Error while user login"
-  }
-};
-
-const validateTurnstile = async () => {
-  try {
-    const { data, error } = await useFetch('/_turnstile/validate', {
-      method: 'POST',
-      body: { token: token }
-    });
-
-    if (error_message.value) {
-      error_message.value = 'Validation failed. Please try again.';
-      turnstile_validated.value = false;
-    } else {
-      console.log('Validation successful: ' + data.value.message);
-      turnstile_validated.value = true;
-      error_message.value = '';
-    }
-  } catch (err) {
-    error_message.value = 'Error: ' + err.message;
-    turnstile_validated.value = false;
-  }
-};
+// Component logic can be added here if needed
 </script>
